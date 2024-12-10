@@ -1,46 +1,46 @@
 classes
     Item.py
-        Class Item():
+        class Item():
         """Any item for loan that the library owns (a book, a magazine or other)"""
 
     Book.py
-        Class Book(Item):
+        class Book(Item):
         """A book item"""
 
     Catalogue.py    -- NEEDS STORAGE --
-        Class Catalogue():
+        class Catalogue():
         """A catalogue of all items the library owns."""
 
     Transaction.py
-        Class Transaction(Item):
+        class Transaction(Item):
         """A book lending transaction"""
 
     Registry.py     -- NEEDS STORAGE --
-        Class Registry(Transaction):
+        class Registry(Transaction):
         """A registry of transactions between the library and the readers"""
 
     Person.py
-        Class Person():
+        class Person():
         """A person, who can become a reader or a librarian"""
 
     Reader.py
-        Class Reader(Person):
+        class Reader(Person):
         """A registered reader who can borrow books from the library"""
 
     Librarian.py    -- BONUS --
-        Class Librarian(Person):
+        class Librarian(Person):
         """A library employee who services readers"""
 
     ClientCard.py   -- BONUS --
-        Class ClientCard():
+        class ClientCard():
         """A card issued to a reader which allows access to the services of the library"""
 
     Clients.py      -- NEEDS STORAGE --
-        Class Clients():
+        class Clients():
         """A list of all library readers"""
 
     Employees.py    -- NEEDS STORAGE --
-        Class Employees():
+        class Employees():
         """A list of all librarians (maybe other employees of the library)"""
 
 

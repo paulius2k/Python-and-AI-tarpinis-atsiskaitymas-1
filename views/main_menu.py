@@ -19,8 +19,8 @@ def show_main_menu():
                 Choice(value="lend", name="• LEND ITEM •"),
                 Choice(value="return", name="• RETURN ITEM •"),
                 Separator(),
-                Choice(value="persons", name="• PEOPLE •"),
                 Choice(value="catalogue", name="• LIBRARY CATALOGUE •"),
+                Choice(value="persons", name="• MANAGE CLIENTS •"),
                 Separator(),
                 Choice(value=None, name="Exit"),
             ],
@@ -64,7 +64,7 @@ def persons_menu():
         message="Select action:",
         choices=[
             Choice(value=1, name="Add new person"),
-            Choice(value=2, name="Register new reader"),
+            Choice(value=2, name="REGISTER new reader"),
             Separator(),
             Choice(value=99, name="Back to main menu"),
         ],
@@ -91,9 +91,9 @@ def catalogue_menu():
     selected_action = inquirer.select(
         message="Select action:",
         choices=[
-            Choice(value=1, name="Search"),
-            Choice(value=2, name="Add new book"),
-            Choice(value=3, name="Delete a book from catalogue"),
+            Choice(value=1, name="SEARCH"),
+            Choice(value=2, name="ADD new book"),
+            Choice(value=3, name="DELETE a book from catalogue"),
             Separator(),
             Choice(value=99, name="Back to main menu"),
         ],
