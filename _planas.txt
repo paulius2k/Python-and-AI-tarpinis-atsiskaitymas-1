@@ -1,0 +1,87 @@
+classes
+    Item.py
+        Class Item():
+        """Any item for loan that the library owns (a book, a magazine or other)"""
+
+    Book.py
+        Class Book(Item):
+        """A book item"""
+
+    Catalogue.py    -- NEEDS STORAGE --
+        Class Catalogue():
+        """A catalogue of all items the library owns."""
+
+    Transaction.py
+        Class Transaction(Item):
+        """A book lending transaction"""
+
+    Registry.py     -- NEEDS STORAGE --
+        Class Registry(Transaction):
+        """A registry of transactions between the library and the readers"""
+
+    Person.py
+        Class Person():
+        """A person, who can become a reader or a librarian"""
+
+    Reader.py
+        Class Reader(Person):
+        """A registered reader who can borrow books from the library"""
+
+    Librarian.py    -- BONUS --
+        Class Librarian(Person):
+        """A library employee who services readers"""
+
+    ClientCard.py   -- BONUS --
+        Class ClientCard():
+        """A card issued to a reader which allows access to the services of the library"""
+
+    Clients.py      -- NEEDS STORAGE --
+        Class Clients():
+        """A list of all library readers"""
+
+    Employees.py    -- NEEDS STORAGE --
+        Class Employees():
+        """A list of all librarians (maybe other employees of the library)"""
+
+
+modules
+    register.py
+        def register_person():
+
+        def register_reader():
+
+        def register_librarian():  -- BONUS --
+
+    services.py
+        def add_item():
+        """Add new item to the catalogue"""
+
+        def trash_item():
+        """Remove / trash an item from the catalogue"""
+
+        def search_item():
+        """Search for item(s) in the catalogue"""
+
+    transactions.py
+        def lend_item():
+        """Lend out an item to the reader"""
+
+        def return_item():
+        """Receive an item back from the reader"""
+
+
+views
+    menus.py
+        def show_main_menu():
+
+        def 
+
+    show_lists.py
+        def list_catalogue():
+
+        def list_transactions():
+
+
+.gitignore
+constants.py
+main.py
