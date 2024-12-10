@@ -56,8 +56,8 @@ modules
         def add_item():
         """Add new item to the catalogue"""
 
-        def trash_item():
-        """Remove / trash an item from the catalogue"""
+        def delete_item():
+        """Remove / delete item from the catalogue"""
 
         def search_item():
         """Search for item(s) in the catalogue"""
