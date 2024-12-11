@@ -1,47 +1,47 @@
 classes
     Item.py
         class Item():
-        """Any item for loan that the library owns (a book, a magazine or other)"""
+            """Any item for loan that the library owns (a book, a magazine or other)"""
 
     Book.py
         class Book(Item):
-        """A book item"""
+            """A book item"""
 
     Catalogue.py    -- NEEDS STORAGE --
         class Catalogue():
-        """A catalogue of all items the library owns."""
+            """A catalogue of all items the library owns."""
 
     Transaction.py
         class Transaction(Item):
-        """A book lending transaction"""
+            """A book lending transaction"""
 
     Registry.py     -- NEEDS STORAGE --
         class Registry(Transaction):
-        """A registry of transactions between the library and the readers"""
+            """A registry of transactions between the library and the readers"""
 
     Person.py
         class Person():
-        """A person, who can become a reader or a librarian"""
+            """A person, who can become a reader or a librarian"""
 
     Reader.py
         class Reader(Person):
-        """A registered reader who can borrow books from the library"""
+            """A registered reader who can borrow books from the library"""
 
     Librarian.py    -- BONUS --
         class Librarian(Person):
-        """A library employee who services readers"""
+            """A library employee who services readers"""
 
     ClientCard.py   -- BONUS --
         class ClientCard():
-        """A card issued to a reader which allows access to the services of the library"""
+            """A card issued to a reader which allows access to the services of the library"""
 
     Clients.py      -- NEEDS STORAGE --
         class Clients():
-        """A list of all library readers"""
+            """A list of all library readers"""
 
     Employees.py    -- NEEDS STORAGE --
         class Employees():
-        """A list of all librarians (maybe other employees of the library)"""
+            """A list of all librarians (maybe other employees of the library)"""
 
 
 modules
@@ -52,23 +52,32 @@ modules
 
         def register_librarian():  -- BONUS --
 
-    services.py
+    item_actions.py
         def add_item():
-        """Add new item to the catalogue"""
+            """Add new item to the catalogue"""
 
         def delete_item():
-        """Remove / delete item from the catalogue"""
+            """Remove / delete item from the catalogue"""
 
         def search_item():
-        """Search for item(s) in the catalogue"""
+            """Search for item(s) in the catalogue"""
+
+        def list_items():
+            """List all items in the catalogue"""
 
     transactions.py
         def lend_item():
-        """Lend out an item to the reader"""
+            """Lend out an item to the reader"""
 
         def return_item():
-        """Receive an item back from the reader"""
+            """Receive an item back from the reader"""
 
+    services.py
+        def load_data_from_storage(file_name):
+            """Load any type of data from the storage file"""
+
+        def dump_data_from_storage(file_name):
+            """Load any type of data from the storage file"""
 
 views
     menus.py

@@ -5,6 +5,8 @@ from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 import os
 
+import modules.item_actions as item_actions
+
 def show_main_menu():  
     stop_menu = False
     
@@ -30,6 +32,9 @@ def show_main_menu():
         match area:
             case None:
                 stop_menu = True
+                print()
+                print("Thank you for using this program.\nSee you next time.")
+                print()
 
             case "lend": 
                 pass
@@ -56,9 +61,23 @@ def show_main_menu():
                         pass
                     
                     case 2: #ADD
+                        result = item_actions.add_book()
+                        if result[0] == 1:
+                            print("New book added")
+                        elif result[0] == 0:
+                            print(result[1])
+                            
+                    case 3: #DELETE
                         pass
-                    
-                  
+
+                    case 4: #LIST
+                        result = item_actions.list_items()
+                        if result[0] == 0:
+                            print("Could not list items.")
+                            print(result[1])
+                
+                any_key = input("Press ENTER to continue...")
+                
 def persons_menu():
     selected_action = inquirer.select(
         message="Select action:",
@@ -92,6 +111,7 @@ def catalogue_menu():
         message="Select action:",
         choices=[
             Choice(value=1, name="SEARCH"),
+            Choice(value=4, name="LIST all items"),            
             Choice(value=2, name="ADD new book"),
             Choice(value=3, name="DELETE a book from catalogue"),
             Separator(),

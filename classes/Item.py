@@ -1,20 +1,30 @@
 import random
+from datetime import datetime
 
 class Item:
     """
-    Any item for loan that the library owns (a book, or in the future - a magazine or other)
+    Any item that the library owns (e.g. a book /or in the future - a magazine or other/)
     """
     
-    def __init__(self, title, author, publication_year, genre, total_units, available_units) -> None:
-        self.id = random.randint(0,999999999) 
-        self.title = title
-        self.author = author
-        self.publication_year = publication_year
-        self.genre = genre
-        self.total_units = total_units
-        self.available_units = available_units
-        
-    def __str__(self):
-        pass
-        
+    def __init__(self, title:str, author:str, publication_year:int, genre:str, total_units:int, available_units:int, status:int = 1, added_user_id:str = "u-999") -> None:
+        self.title:str = title
+        self.author:str = author
+        self.publication_year:int = publication_year
+        self.genre:str = genre
+        self.total_units:int = total_units
+        self.available_units:int = available_units
+        self.status:int = status    # 1 - active, 2 - deleted
+        self.added_user_id:str = added_user_id
 
+        self.id:str = f"i-{str(random.randint(100000,999999))}"
+        self.ts_added:datetime = datetime.today()
+   
+    def __str__(self):
+        return (
+            f"title: {self.title}, "
+            f"author: {self.author}, "
+            f"publication_year: {self.publication_year}, "
+            f"genre: {self.genre}, "
+            f"total_units: {self.total_units}, "
+            f"available_units: {self.available_units}"
+        )
