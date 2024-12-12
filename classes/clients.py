@@ -1,14 +1,14 @@
 from InquirerPy import prompt
 from InquirerPy.validator import EmptyInputValidator
-from datetime import datetime
 import pickle
 import os
+from datetime import datetime
 import constants as const
-from classes.person import Person
+from classes.reader import Reader
 
 class Clients:
     """
-    A list of all library readers
+    A list of all library clients-readers
     """
     def __init__(self):
         # First try to load data from file if such exists
@@ -42,58 +42,68 @@ class Clients:
             msg = f"Error storing data. {err}\n"
         
         return (result, msg)
-    
-    def add_reader(self):
+       
+    def add_client(self):
         """Add new Reader to the catalogue"""
-        
-        result = ()
-        
-        name, last_name, dob, client_card_no:str, status:int = 1, client_card_no
-        
+    
+        # inner funtion to validate date-of-birth
+        def input_datetime_validator(value):
+            try:
+                datetime_format = "%Y-%m-%d"  
+                datetime.strptime(value, datetime_format)
+                return True  # Input is valid
+            except Exception:
+                return False # Input invalid
+    
+        result = ()        
         
         try:       
-            # inform user that new catalogue will be created because there was none found / or it was empty
+            # inform user that new client database will be created because there was none found / or it was empty
             if not self.items:
-                print("Creating new catalogue.\n")
+                print("Creating a new client database.\n")
 
             # form a list of input fields to user (using InquirerPy library)
+            
+            status_options = {
+                1: "active",
+                2: "not active",
+            }
+            status_choices = [{"name": value, "value": key} for key, value in status_options.items()]
+            
+            
             questions = [
                 {
                     "type": "input", 
                     "message": "Enter client name:",
+                    "validate": EmptyInputValidator(),
                     "name": "name",
                 },
                 {
                     "type": "input", 
                     "message": "Enter client last name:", 
+                    "validate": EmptyInputValidator(),
                     "name": "last_name",
                 },
                 {
-                    "type": "number", 
-                    "message": "Enter year of publication:", 
-                    "min_allowed": 1,
-                    "max_allowed": datetime.today().year + 1,
-                    "default": None,
+                    "type": "input", 
+                    "message": "Enter client date of birth (YYYY-MM-DD):", 
+                    "validate": input_datetime_validator,
+                    "invalid_message": "Input should be in date format YYYY-MM-DD.",
+                    "name": "dob"
+                },
+                {
+                    "type": "input", 
+                    "message": "Enter client card number:", 
                     "validate": EmptyInputValidator(),
-                    "invalid_message": "Input should be number.",
-                    "name": "publication_year"
+                    "name": "client_card_no",
                 },
                 {
                     "type": "rawlist", 
-                    "message": "Select genre:", 
-                    "choices": ["Fiction", "Non-Fiction", "Science Fiction (Sci-Fi)","Mystery/Thriller","Romance", "Horror", "Historical Fiction", "Young Adult (YA)","Poetry"],
-                    "name": "genre", 
+                    "message": "Select client status:", 
+                    "choices": status_choices,
+                    "name": "status", 
                 },
-                {
-                    "type": "number", 
-                    "message": "How many units received:", 
-                    "min_allowed": 1,
-                    "max_allowed": 100,
-                    "validate": EmptyInputValidator(),
-                    "default": None,
-                    "invalid_message": "Input should be number.",
-                    "name": "total_units"
-                },
+
             ]
             
             # show a list of input fields to user and ask for data input
@@ -104,13 +114,16 @@ class Clients:
                 )
 
             if answers:
-                new_item = Book(
-                    title = answers["title"],
-                    author = answers["author"],
-                    publication_year = int(answers["publication_year"]),
-                    genre = answers["genre"],
-                    total_units = answers["total_units"],
-                    available_units = answers["total_units"]
+                
+                datetime_format = "%Y-%m-%d"  
+                dob_dt = datetime.strptime(answers["dob"], datetime_format)
+                
+                new_item = Reader(
+                    name = answers["name"],
+                    last_name = answers["last_name"],
+                    dob = dob_dt,
+                    client_card_no = answers["client_card_no"],
+                    status = int(answers["status"])
                 )
                 
                 self.items.append(new_item)
@@ -119,30 +132,31 @@ class Clients:
             result = self._dump_data_to_storage()
                 
         except KeyboardInterrupt as err:
-            result = (0, f"Entry cancelled by user. Item was not saved.\n")        
+            result = (0, f"Entry cancelled by user. Client was not saved to the database.\n")        
         except Exception as err:
             result = (0, f"{err}\n")
         
         return result
 
-    def get_items(self, search_phrase = "", item_status = 1):
-        """Returns a list of items from the catalogue depending of request criteria"""
+    def get_clients(self, search_phrase = "", item_status = 1):
+        """Returns a list of clients from the database by search criteria"""
 
-        found_items = []    
+        found_clients = []    
         
         if self.items:                
             for item in self.items:
                 if item.status == item_status:
                     if search_phrase:
-                        if search_phrase in item.__str__().lower() and item.status == item_status:
-                            found_items.append(item)    
+                        if search_phrase.lower() in item.__str__().lower() and item.status == item_status:
+                            found_clients.append(item)    
                     else:
-                        found_items.append(item)     
-        
-        return found_items
+                        found_clients.append(item)     
+
+        return found_clients
+                
     
-    def delete_item(self, id):
-        """Marks item as deleted"""
+    def deactivate_client(self, id):
+        """Marks a client as non-active"""
         
         result = ()
         
@@ -155,7 +169,7 @@ class Clients:
                     break
         
         except Exception as err:
-            result = (0, f"Error deleting item: {err}\n")
+            result = (0, f"Error disactivating client: {err}\n")
         
         return result
     

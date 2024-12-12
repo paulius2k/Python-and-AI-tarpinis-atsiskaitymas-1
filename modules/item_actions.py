@@ -1,8 +1,11 @@
-
 import views.lists as lists
+from classes.catalogue import Catalogue
 
-def list_items(catalogue, search_by = "", item_status = 1, top_msg = ""):
-    """Prints all items in the catalogue to terminal"""
+def prepare_to_list_items(catalogue: Catalogue, search_by = "", item_status = 1, top_msg = ""):
+    """
+    Prepares items from the catalogue according to search criteria 
+    for listing in terminal window 
+    """
     found_items = []
     error = 0
     msg = ""
@@ -25,17 +28,3 @@ def list_items(catalogue, search_by = "", item_status = 1, top_msg = ""):
         msg = f"Error listing items: {err}"
     
     return (error, msg, selected_item)
-
-# def get_user_confirmation(input_text, options):
-#     try:
-#         while True:
-#             user_response = input(input_text).lower()
-            
-#             if user_response in options:
-#                 return (1, user_response)
-            
-#     except KeyboardInterrupt as err:
-#         return (0, "Quit by user")
-    
-#     except Exception as err:
-#         return (0, err)

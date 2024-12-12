@@ -58,11 +58,13 @@ class Catalogue:
                 {
                     "type": "input", 
                     "message": "Enter the book title:",
+                    "validate": EmptyInputValidator(),
                     "name": "title",
                 },
                 {
                     "type": "input", 
-                    "message": "Enter the author:", 
+                    "message": "Enter the author:",
+                    "validate": EmptyInputValidator(),                    
                     "name": "author",
                 },
                 {
@@ -106,8 +108,8 @@ class Catalogue:
                     author = answers["author"],
                     publication_year = int(answers["publication_year"]),
                     genre = answers["genre"],
-                    total_units = answers["total_units"],
-                    available_units = answers["total_units"]
+                    total_units = int(answers["total_units"]),
+                    available_units = int(answers["total_units"])
                 )
                 
                 self.items.append(new_item)
@@ -131,7 +133,7 @@ class Catalogue:
             for item in self.items:
                 if item.status == item_status:
                     if search_phrase:
-                        if search_phrase in item.__str__().lower() and item.status == item_status:
+                        if search_phrase.lower() in item.__str__().lower() and item.status == item_status:
                             found_items.append(item)    
                     else:
                         found_items.append(item)     
