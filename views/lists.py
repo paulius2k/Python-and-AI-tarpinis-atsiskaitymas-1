@@ -26,7 +26,7 @@ def list_catalogue_dynamic(data: Catalogue, scope_msg = ""):
 
             inquirer_msg_text = f"Keys: ↑, ↓ - to move, ENTER - to choose action with item, Esc - to exit\n"        
             inquirer_msg_text += f"\n  {scope_msg} (found: {len(data)})\n"
-            inquirer_msg_text += f"  {big_separator}\n  {header}\n  {small_separator}"
+            inquirer_msg_text += f"  {big_separator}\n  {header}\n  {small_separator}\n"
             
             for idx, item in enumerate(data, start=1):
                 if len(item.title) >= col_width:

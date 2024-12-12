@@ -76,35 +76,32 @@ modules
     services.py
 
 
-
 views
     menus.py
         def show_main_menu():
             """
 
-        LIBRARIAN MENU STRUCTURE:
-        ----------------------
-        LEND ITEM
-            - SEARCH ITEM
-                -- {ITEM} ACTIONS MENU
-
-        RETURN ITEM
-            - SEARCH READER
-                -- {READER} ACTIONS MENU
-
-        LIBRARY CATALOGUE
-            - LIST ALL ITEMS
-                -- {ITEM} ACTIONS MENU
-            - SEARCH FOR ITEM
-                -- {ITEM} ACTIONS MENU
-            - ADD NEW BOOK
-            - DELETE BOOK
+            LIBRARIAN MENU STRUCTURE:
+            ----------------------
+            LEND ITEM
                 - SEARCH ITEM
                     -- {ITEM} ACTIONS MENU
-            - LIST DELETED ITEMS
-            - CATALOGUE STATISTICS
 
+            RETURN ITEM
+                - SEARCH READER
+                    -- {READER} ACTIONS MENU
 
+            LIBRARY CATALOGUE
+                - LIST ALL ITEMS
+                    -- {ITEM} ACTIONS MENU
+                - SEARCH FOR ITEM
+                    -- {ITEM} ACTIONS MENU
+                - ADD NEW BOOK
+                - DELETE BOOK
+                    - SEARCH ITEM
+                        -- {ITEM} ACTIONS MENU
+                - LIST DELETED ITEMS
+                - CATALOGUE STATISTICS
 
 
         def {other_menus}:
@@ -113,7 +110,7 @@ views
     lists.py
         def list_catalogue_dynamic():
 
-        def list_transactions():
+        def list_transactions_dynamic():
 
 
 .gitignore

@@ -4,16 +4,16 @@ from datetime import datetime
 import pickle
 import os
 import constants as const
-from classes.book import Book
+from classes.person import Person
 
-class Catalogue:
+class Clients:
     """
-    A catalogue of all items the library owns.
+    A list of all library readers
     """
     def __init__(self):
         # First try to load data from file if such exists
-        if os.path.isfile(const.CATALOGUE_FILE_NAME):
-            with open(const.CATALOGUE_FILE_NAME, "rb") as file:
+        if os.path.isfile(const.CLIENTS_FILE_NAME):
+            with open(const.CLIENTS_FILE_NAME, "rb") as file:
                 obj = pickle.load(file)
 
             # copy all attributes from the loaded object to self
@@ -33,7 +33,7 @@ class Catalogue:
         msg = ""
         
         try:
-            with open(const.CATALOGUE_FILE_NAME, "wb") as file:
+            with open(const.CLIENTS_FILE_NAME, "wb") as file:
                 pickle.dump(self, file)
             result = 1
             msg = f"Data stored successfully"
@@ -43,10 +43,13 @@ class Catalogue:
         
         return (result, msg)
     
-    def add_book(self):
-        """Add new Book to the catalogue"""
+    def add_reader(self):
+        """Add new Reader to the catalogue"""
         
         result = ()
+        
+        name, last_name, dob, client_card_no:str, status:int = 1, client_card_no
+        
         
         try:       
             # inform user that new catalogue will be created because there was none found / or it was empty
@@ -57,13 +60,13 @@ class Catalogue:
             questions = [
                 {
                     "type": "input", 
-                    "message": "Enter the book title:",
-                    "name": "title",
+                    "message": "Enter client name:",
+                    "name": "name",
                 },
                 {
                     "type": "input", 
-                    "message": "Enter the author:", 
-                    "name": "author",
+                    "message": "Enter client last name:", 
+                    "name": "last_name",
                 },
                 {
                     "type": "number", 
