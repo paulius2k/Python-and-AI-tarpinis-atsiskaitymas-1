@@ -82,11 +82,37 @@ modules
 views
     menus.py
         def show_main_menu():
+            """
 
-        def 
+        MENU STRUCTURE:
+        ----------------------
+        LEND ITEM
+            - SEARCH ITEM
+                -- {ITEM} ACTIONS MENU
 
-    show_lists.py
-        def list_catalogue():
+        RETURN ITEM
+            - SEARCH READER
+                -- {READER} ACTIONS MENU
+
+        LIBRARY CATALOGUE
+            - LIST ALL ITEMS
+                -- {ITEM} ACTIONS MENU
+            - SEARCH FOR ITEM
+                -- {ITEM} ACTIONS MENU
+            - ADD NEW BOOK
+            - DELETE BOOK
+                - SEARCH ITEM
+                    -- {ITEM} ACTIONS MENU
+            - LIST DELETED ITEMS
+
+
+
+
+        def {other_menus}:
+            """
+
+    lists.py
+        def list_catalogue_dynamic():
 
         def list_transactions():
 

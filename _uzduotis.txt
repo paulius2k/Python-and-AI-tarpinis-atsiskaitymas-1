@@ -29,7 +29,7 @@ Būtinos sąlygos
 4. Pridėtos/pašalintos knygos, turi išlikti tarp programos paleidimų (vadinasi viskas saugoma faile)
 5. Informacija saugome pickle/csv/json/txt failuose
 6. Programa negali "nulūžti" (už kiekvieną vietą, kurioje lūžta, minus balai)
-7. Programoje viskas turi būti funkcijose/metoduose klasėse. Globaliai jie gali būti tik kviečiami, bet visi skaičiavimai būtent šiose struktūrose.
+===>>>> 7. Programoje viskas turi būti funkcijose/metoduose klasėse. Globaliai jie gali būti tik kviečiami, bet visi skaičiavimai būtent šiose struktūrose.
 8. Privaloma naudota GitHub ir turėti logiškus commit pavadinimus, bent 3 šakas sukurtas projekto metu ir bent 5 commitų (commitai neturėtų būti labai dideli)
  
 

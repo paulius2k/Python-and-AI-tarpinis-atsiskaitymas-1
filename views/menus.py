@@ -6,8 +6,9 @@ from InquirerPy.separator import Separator
 import os
 
 import modules.item_actions as item_actions
+from classes.catalogue import Catalogue
 
-def show_main_menu():  
+def show_main_menu(catalogue: Catalogue):  
     stop_menu = False
     
     while not stop_menu:
@@ -30,8 +31,8 @@ def show_main_menu():
             case "return": 
                 pass
                      
-            case "persons":        
-                action = persons_menu_selection()
+            case "people":        
+                action = people_menu_selection()
                 
                 match action:
                     case 1:
@@ -51,12 +52,13 @@ def show_main_menu():
                             print(result[1])
                     
                     case 2: #ADD
-                        result = item_actions.add_book()
+                        result = catalogue.add_book()
                         if result[0] == 1:
                             print("New book added")
                         elif result[0] == 0:
                             print(result[1])
-                            
+                        
+                        any_key = input("Press ENTER to continue...")
                     case 3: #DELETE
                         pass
 
@@ -65,8 +67,11 @@ def show_main_menu():
                         if result[0] == 0:
                             print("Could not list items.")
                             print(result[1])
+
+                        if result[2]:
+                            print(f"You selected item: {result[2]}")
+                            any_key = input("Press ENTER to continue...")
                 
-                any_key = input("Press ENTER to continue...")
 
 def main_menu_selection():
     selected_action = inquirer.select(
@@ -76,7 +81,7 @@ def main_menu_selection():
             Choice(value="return", name="• RETURN ITEM •"),
             Separator(),
             Choice(value="catalogue", name="• LIBRARY CATALOGUE •"),
-            Choice(value="persons", name="• MANAGE CLIENTS •"),
+            Choice(value="people", name="• MANAGE CLIENTS •"),
             Separator(),
             Choice(value=None, name="Exit"),
         ],
@@ -110,12 +115,12 @@ def catalogue_menu_selection():
 
     return selected_action
 
-def persons_menu_selection():
+def people_menu_selection():
     selected_action = inquirer.select(
         message="Select action:",
         choices=[
-            Choice(value=1, name="Add new person"),
-            Choice(value=2, name="REGISTER new reader"),
+            Choice(value=1, name="1. Register new READER"),
+            Choice(value=2, name="2. Register new LIBRARIAN"),
             Separator(),
             Choice(value=99, name="Back to main menu"),
         ],
