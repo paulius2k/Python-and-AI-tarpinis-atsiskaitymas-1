@@ -11,6 +11,15 @@ classes
         class Catalogue():
             """A catalogue of all items the library owns."""
 
+            def _dump_data_from_storage(file_name):
+                """Load any type of data from the storage file"""
+
+            def add_book():
+                """Add new item to the catalogue"""
+
+            def get_items()
+                """Returns a list of items from the catalogue depending of request criteria"""
+
     Transaction.py
         class Transaction(Item):
             """A book lending transaction"""
@@ -46,21 +55,13 @@ classes
 
 modules
     register.py
-        def register_person():
-
         def register_reader():
 
         def register_librarian():  -- BONUS --
 
     item_actions.py
-        def add_item():
-            """Add new item to the catalogue"""
-
         def delete_item():
             """Remove / delete item from the catalogue"""
-
-        def search_item():
-            """Search for item(s) in the catalogue"""
 
         def list_items():
             """List all items in the catalogue"""
@@ -73,18 +74,15 @@ modules
             """Receive an item back from the reader"""
 
     services.py
-        def load_data_from_storage(file_name):
-            """Load any type of data from the storage file"""
 
-        def dump_data_from_storage(file_name):
-            """Load any type of data from the storage file"""
+
 
 views
     menus.py
         def show_main_menu():
             """
 
-        MENU STRUCTURE:
+        LIBRARIAN MENU STRUCTURE:
         ----------------------
         LEND ITEM
             - SEARCH ITEM
@@ -104,6 +102,7 @@ views
                 - SEARCH ITEM
                     -- {ITEM} ACTIONS MENU
             - LIST DELETED ITEMS
+            - CATALOGUE STATISTICS
 
 
 

@@ -47,7 +47,6 @@ class Catalogue():
         """Add new Book to the catalogue"""
         
         result = ()
-        msg = ""
         
         try:       
             # inform user that new catalogue will be created because there was none found / or it was empty
@@ -123,5 +122,38 @@ class Catalogue():
         
         return result
 
+    def get_items(self, search_phrase = "", item_status = 1):
+        """Returns a list of items from the catalogue depending of request criteria"""
 
+        found_items = []    
+        
+        if self.items:                
+            for item in self.items:
+                if item.status == item_status:
+                    if search_phrase:
+                        if search_phrase in item.__str__().lower() and item.status == item_status:
+                            found_items.append(item)    
+                    else:
+                        found_items.append(item)     
+        
+        return found_items
+    
+    def delete_item(self, id):
+        """Marks item as deleted"""
+        
+        result = ()
+        
+        try:
+            for item in self.items:
+                if item.id == id:
+                    item.status = 2
+                    dump_result = self._dump_data_to_storage()
+                    result = (1, "\nItem deleted successfully")
+                    break
+        
+        except Exception as err:
+            result = (0, f"Error deleting item: {err}\n")
+        
+        return result
+    
     
