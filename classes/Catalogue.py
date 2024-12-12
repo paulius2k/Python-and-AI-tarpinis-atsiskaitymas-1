@@ -10,50 +10,38 @@ class Catalogue():
     """
     A catalogue of all items the library owns.
     """
-    def __init__(self, items = []) -> None:
-        self.items = items
+    def __init__(self):
+        # First try to load data from file if such exists
+        if os.path.isfile(const.CATALOGUE_FILE_NAME):
+            with open(const.CATALOGUE_FILE_NAME, "rb") as file:
+                obj = pickle.load(file)
+
+            # copy all attributes from the loaded object to self
+            self.__dict__.update(obj.__dict__)
+            
+        else:
+            self.items = []
         
     def __str__(self):
+        result = ""
         for item in self.items:
-            print(item)
-    
-    def _load_data_from_storage(self):
-        
+            result += f"{item}\n"
+        return result
+       
+    def _dump_data_to_storage(self):
         result = 0
         msg = ""
         
         try:
-            if os.path.isfile(const.CATALOGUE_FILE_NAME):
-                with open(const.CATALOGUE_FILE_NAME, "rb") as file:
-                    self.items = pickle.load(file)
-                    if not self.items:
-                        msg = f"Data file is empty.\n"
-                    result = 1
-            else:
-                msg = f"Data file does not exist.\n"
-
-        except Exception as err:
-            msg = f"Error reading data file. {err}\n"        
-        return (result, msg)
-    
-    def _dump_data_to_storage(self):
-        
-        result = ()
-        msg = ""
-        
-        try:
             with open(const.CATALOGUE_FILE_NAME, "wb") as file:
-                pickle.dump(self.items, file)
-            result[0] = 1
+                pickle.dump(self, file)
+            result = 1
             msg = f"Data stored successfully"
             
         except Exception as err:
             msg = f"Error storing data. {err}\n"
         
-        result[1] = msg
-        return result
-    
-    
+        return (result, msg)
     
     def add_book(self):
         """Add new Book to the catalogue"""
@@ -61,14 +49,12 @@ class Catalogue():
         result = ()
         msg = ""
         
-        try:
-            # load catalogue from the storage
-            load_result = self._load_data_from_storage()
-            
+        try:       
+            # inform user that new catalogue will be created because there was none found / or it was empty
             if not self.items:
-                print(load_result[1])
                 print("Creating new catalogue.\n")
 
+            # form a list of input fields to user (using InquirerPy library)
             questions = [
                 {
                     "type": "input", 
@@ -107,7 +93,8 @@ class Catalogue():
                     "name": "total_units"
                 },
             ]
-
+            
+            # show a list of input fields to user and ask for data input
             answers = prompt(
                 questions,
                 keybindings={"interrupt": [{"key": "escape"}]},
@@ -125,9 +112,9 @@ class Catalogue():
                 )
                 
                 self.items.append(new_item)
-            
+                
             # save data to file
-            result = self._dump_data_to_storage(const.CATALOGUE_FILE_NAME, self.items)
+            result = self._dump_data_to_storage()
                 
         except KeyboardInterrupt as err:
             result = (0, f"Entry cancelled by user. Item was not saved.\n")        

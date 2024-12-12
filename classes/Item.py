@@ -21,14 +21,14 @@ class Item:
    
     def __str__(self):
         return (
-            f"{self.id}, "
+            f"[{self.id}, "
             f"{self.title}, "
             f"{self.author}, "
             f"{self.publication_year}, "
             f"{self.genre}, "
             f"{self.total_units}, "
             f"{self.available_units}, "
-            f"{self.added_user_id}, "
+            f"{self.added_user_id}]"
         )
     
     def __repr__(self):

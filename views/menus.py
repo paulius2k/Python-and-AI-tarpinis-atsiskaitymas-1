@@ -58,7 +58,7 @@ def show_main_menu(catalogue: Catalogue):
                         elif result[0] == 0:
                             print(result[1])
                         
-                        any_key = input("Press ENTER to continue...")
+                        wait_for_keypress = input("Press ENTER to continue...")
                     case 3: #DELETE
                         pass
 
