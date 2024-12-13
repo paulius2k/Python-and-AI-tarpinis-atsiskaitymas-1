@@ -39,4 +39,12 @@ Taip pat prisekite word failą, kuriame bus tokie dalykai.
 1. Įsivertinti save, kažkokiu tai pažymiu iki 10
 2. Parašyti, kas patiko ar nepatiko darbo metu
 3. Kas buvo naujo, ko išmokote
+- pradėjau labiau mėgti metodus klasėse ir mažiau kurti išorinių funkcijų
+- pabandymai naudoti paprastą git merge'inimą (pvz. per Git Graph) vs. git pull request
+- dar kartą įsitikinau, kad klasės parametro tipo nurodymas klasės deklaracijoje NEREIŠKIA, kad toks tipas bus išsaugotas automatiškai: tą reikia užtikrinti programiškai
+
 4. Ar turite kokių pastebėjimų
+- vienas didesnių uždavinių yra išmokti rasti balansą tarp universalių ir atskirų funkcijų, kurios atlieka labai panašias užduotis.
+Tokie atviri klausimai: 
+-- skaitomumas vs. kodo vietų kiekis atliekant pakeitimus,
+-- gal geriau viena funkcija su keletu daugiau if'ų

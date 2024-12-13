@@ -12,7 +12,7 @@ def prepare_to_list_items(catalogue: Catalogue, search_by = "", item_status = 1,
     selected_item = None
     
     try:
-        # get ALL active (non-deleted) items from the catalogue
+        # get items from the catalogue by search phrase and item status
         found_items = catalogue.get_items(search_by, item_status)        
         list_result = lists.list_catalogue_dynamic(found_items, top_msg)
 

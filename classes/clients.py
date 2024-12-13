@@ -154,7 +154,6 @@ class Clients:
 
         return found_clients
                 
-    
     def deactivate_client(self, id):
         """Marks a client as non-active"""
         
