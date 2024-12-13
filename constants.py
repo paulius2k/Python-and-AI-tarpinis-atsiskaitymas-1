@@ -1,6 +1,8 @@
 # storage / file name constants:
 
 CATALOGUE_FILE_NAME = r"data/catalogue.pickle"
-# REGISTRY_FILE_NAME = r"data/registry.pickle"
-# CLIENTS
+CLIENTS_FILE_NAME = r"data/clients.pickle"
+REGISTRY_FILE_NAME = r"data/registry.pickle"
+
 # EMPLOYEES
+

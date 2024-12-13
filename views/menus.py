@@ -6,9 +6,17 @@ from InquirerPy.separator import Separator
 import os
 
 import modules.item_actions as item_actions
+import modules.client_actions as client_actions
 from classes.catalogue import Catalogue
+from classes.clients import Clients
 
-def show_main_menu(catalogue: Catalogue):  
+def main_menu_logic(catalogue: Catalogue, clients: Clients):  
+    """
+    Main menu logic and master loop. 
+    Calls functions to display menu and sub-menu items.
+    Also calls feature functions based on user's selections.
+    """
+    
     stop_menu = False
     
     while not stop_menu:
@@ -28,7 +36,7 @@ def show_main_menu(catalogue: Catalogue):
             case "lend": 
                 search_str = str(input("\n  Enter search keyword to find the item: ")).lower()
                 top_msg = f"LISTING ITEMS BY SEARCH KEYWORD '{search_str}'"
-                list_result = item_actions.list_items(catalogue, search_str, 1, top_msg)
+                list_result = item_actions.prepare_to_list_items(catalogue, search_str, 1, top_msg)
                 
                 if list_result[0] == 1:
                     print("Search failed.")
@@ -36,7 +44,7 @@ def show_main_menu(catalogue: Catalogue):
             
                 if list_result[2]:
                     print(f"\nSelected item id: {list_result[2]}\n")
-                    show_item_menu(catalogue, list_result[2])
+                    item_menu_logic(catalogue, list_result[2])
             
             case "return": 
                 pass
@@ -45,10 +53,32 @@ def show_main_menu(catalogue: Catalogue):
                 action = people_menu_selection()
                 
                 match action:
-                    case 1:
-                        pass
+                    case "new_reader":
+                        result = clients.add_client()
+                        if result[0] == 1:
+                            print("\nNew client added")
+                        elif result[0] == 0:
+                            print(result[1])
+                        
+                        wait_for_keypress = input("Press ENTER to continue...")
                     
-                    case 2:
+                    case "search_reader": 
+                        search_str = str(input("\n  Enter search keyword: ")).lower()
+                        top_msg = f"LISTING CLIENTS BY SEARCH KEYWORD '{search_str}'"
+                        list_result = client_actions.prepare_to_list_clients(clients, search_str, 1, top_msg)
+                        
+                        if list_result[0] == 1:
+                            print("Search failed.")
+                            print(list_result[1])
+                    
+                        if list_result[2]:
+                            print(f"\nSelected client id: {list_result[2]}\n")
+                            item_menu_logic(catalogue, list_result[2])
+                    
+                    case "deactivate_reader": 
+                        pass
+
+                    case "new_librarian":
                         pass
                              
             case "catalogue":      
@@ -58,7 +88,7 @@ def show_main_menu(catalogue: Catalogue):
                     case "search":
                         search_str = str(input("\n  Enter search keyword: ")).lower()
                         top_msg = f"LISTING ITEMS BY SEARCH KEYWORD '{search_str}'"
-                        list_result = item_actions.list_items(catalogue, search_str, 1, top_msg)
+                        list_result = item_actions.prepare_to_list_items(catalogue, search_str, 1, top_msg)
                         
                         if list_result[0] == 1:
                             print("Search failed.")
@@ -66,12 +96,12 @@ def show_main_menu(catalogue: Catalogue):
                     
                         if list_result[2]:
                             print(f"\nSelected item id: {list_result[2]}\n")
-                            show_item_menu(catalogue, list_result[2])
+                            item_menu_logic(catalogue, list_result[2])
                             
                     case "add":
                         result = catalogue.add_book()
                         if result[0] == 1:
-                            print("New book added")
+                            print("\nNew book added")
                         elif result[0] == 0:
                             print(result[1])
                         
@@ -83,7 +113,7 @@ def show_main_menu(catalogue: Catalogue):
                     case "list_all":
                         search_str = ""
                         top_msg = f"LISTING ALL ITEMS"
-                        list_result = item_actions.list_items(catalogue, search_str, 1, top_msg)
+                        list_result = item_actions.prepare_to_list_items(catalogue, search_str, 1, top_msg)
 
                         if list_result[0] == 1:
                             print("No items in the catalogue.")
@@ -92,12 +122,12 @@ def show_main_menu(catalogue: Catalogue):
                             
                         if list_result[2]:
                             print(f"\nSelected item id: {list_result[2]}\n")
-                            show_item_menu(catalogue, list_result[2])
+                            item_menu_logic(catalogue, list_result[2])
                                     
                     case "list_del":
                         search_str = ""
                         top_msg = f"LISTING ALL DELETED ITEMS"
-                        list_result = item_actions.list_items(catalogue, search_str, 2, top_msg)
+                        list_result = item_actions.prepare_to_list_items(catalogue, search_str, 2, top_msg)
 
                         if list_result[0] == 1:
                             print("No items in the catalogue.")
@@ -108,7 +138,11 @@ def show_main_menu(catalogue: Catalogue):
                     #     print("Function not ready yet.")
                     #     any_key = input("Press ENTER to continue...")
                                  
-def show_item_menu(catalogue: Catalogue, item_id):
+def item_menu_logic(catalogue: Catalogue, item_id):
+    """
+    Catalogue item menu, gives options for item management, 
+    gets user input and calls specific feature methods.
+    """
     item_action = item_menu_selection()
 
     match item_action:
@@ -130,6 +164,9 @@ def show_item_menu(catalogue: Catalogue, item_id):
             any_key = input("Press ENTER to continue...")
 
 def main_menu_selection():
+    """
+    Menu item display and user selection capture and return to main menu logic.
+    """
     selected_action = inquirer.select(
         message="\nLIBRARIAN MENU. SELECT AN AREA TO WORK WITH:\n",
         choices=[
@@ -137,7 +174,7 @@ def main_menu_selection():
             Choice(value="return", name="• RETURN ITEM •"),
             Separator(),
             Choice(value="catalogue", name="• LIBRARY CATALOGUE •"),
-            Choice(value="people", name="• MANAGE CLIENTS •"),
+            Choice(value="people", name="• MANAGE CLIENTS / EMPLOYEES •"),
             Separator(),
             Choice(value=None, name="Exit"),
         ],
@@ -172,11 +209,16 @@ def catalogue_menu_selection():
     return selected_action
 
 def people_menu_selection():
+    """
+    Menu item display and user selection capture and return to main menu logic.
+    """
     selected_action = inquirer.select(
         message="Select action:",
         choices=[
-            Choice(value=1, name="1. Register new READER"),
-            Choice(value=2, name="2. Register new LIBRARIAN"),
+            Choice(value="search_reader", name="1. SEARCH for a reader"),
+            Choice(value="new_reader", name="2. Register NEW reader"),
+            Separator(),
+            Choice(value="new_librarian", name="3. Register NEW librarian"),
             Separator(),
             Choice(value=99, name="Back to main menu"),
         ],
@@ -186,6 +228,9 @@ def people_menu_selection():
     return selected_action
 
 def item_menu_selection():
+    """
+    Menu item display and user selection capture and return to main menu logic.
+    """
     selected_action = inquirer.select(
         message="Select action with the item:",
         choices=[
@@ -200,6 +245,9 @@ def item_menu_selection():
     return selected_action
 
 def user_confirmation(prompt_text = "Yes or no"):
+    """
+    Menu item display and user selection capture and return to main menu logic.
+    """
     selected_action = inquirer.select(
         message=prompt_text,
         choices=[

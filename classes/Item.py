@@ -13,10 +13,10 @@ class Item:
         self.genre:str = genre
         self.total_units:int = total_units
         self.available_units:int = available_units
-        self.status:int = status    # 1 - active, 2 - deleted
+        self.status:int = status    # 1 - active, 2 - marked as deleted
         self.added_user_id:str = added_user_id
 
-        self.id:str = f"i-{str(random.randint(100000,999999))}"
+        self.id:str = f"i-{str(random.randint(100000,999999))}"     # i - item
         self.ts_added:datetime = datetime.today()
    
     def __str__(self):
@@ -32,7 +32,7 @@ class Item:
         )
     
     def __repr__(self):
-        return f"{self.__class__.__name__}({self.title}, {self.author}, {self.publication_year}, {self.genre}, {self.total_units}, {self.available_units}, {self.status}, {self.added_user_id})"
+        return f"{self.__class__.__name__}({self.title}, {self.author}, {self.publication_year}, {self.genre}, {self.total_units}, {self.available_units}, {self.status}, {self.added_user_id}, {self.ts_added})"
 
     
     

@@ -30,7 +30,7 @@ OK 3. Programa turi veikti tol, kol bus išjungta, naudotojo pageidavimu
 OK 4. Pridėtos/pašalintos knygos, turi išlikti tarp programos paleidimų (vadinasi viskas saugoma faile)
 OK 5. Informacija saugome pickle/csv/json/txt failuose
 6. Programa negali "nulūžti" (už kiekvieną vietą, kurioje lūžta, minus balai)
-===>>>> 7. Programoje viskas turi būti funkcijose/metoduose klasėse. Globaliai jie gali būti tik kviečiami, bet visi skaičiavimai būtent šiose struktūrose.
+7. Programoje viskas turi būti funkcijose/metoduose klasėse. Globaliai jie gali būti tik kviečiami, bet visi skaičiavimai būtent šiose struktūrose.
 8. Privaloma naudota GitHub ir turėti logiškus commit pavadinimus, bent 3 šakas sukurtas projekto metu ir bent 5 commitų (commitai neturėtų būti labai dideli)
  
 
@@ -39,4 +39,12 @@ Taip pat prisekite word failą, kuriame bus tokie dalykai.
 1. Įsivertinti save, kažkokiu tai pažymiu iki 10
 2. Parašyti, kas patiko ar nepatiko darbo metu
 3. Kas buvo naujo, ko išmokote
+- pradėjau labiau mėgti metodus klasėse ir mažiau kurti išorinių funkcijų
+- pabandymai naudoti paprastą git merge'inimą (pvz. per Git Graph) vs. git pull request
+- dar kartą įsitikinau, kad klasės parametro tipo nurodymas klasės deklaracijoje NEREIŠKIA, kad toks tipas bus išsaugotas automatiškai: tą reikia užtikrinti programiškai
+
 4. Ar turite kokių pastebėjimų
+- vienas didesnių uždavinių yra išmokti rasti balansą tarp universalių ir atskirų funkcijų, kurios atlieka labai panašias užduotis.
+Tokie atviri klausimai: 
+-- skaitomumas vs. kodo vietų kiekis atliekant pakeitimus,
+-- gal geriau viena funkcija su keletu daugiau if'ų
