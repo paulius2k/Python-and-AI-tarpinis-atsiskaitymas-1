@@ -1,11 +1,11 @@
-import random
+import time
 from datetime import datetime
 
 class Item:
     """
     Any item that the library owns (e.g. a book /or in the future - a magazine or other/)
     """
-    
+
     def __init__(self, title:str, author:str, publication_year:int, genre:str, total_units:int, available_units:int, status:int = 1, added_user_id:str = "u-999") -> None:
         self.title:str = title
         self.author:str = author
@@ -16,7 +16,7 @@ class Item:
         self.status:int = status    # 1 - active, 2 - marked as deleted
         self.added_user_id:str = added_user_id
 
-        self.id:str = f"i-{str(random.randint(100000,999999))}"     # i - item
+        self.id:str = f"i-{str(int(time.time() * 100))}"     # i - item
         self.ts_added:datetime = datetime.today()
    
     def __str__(self):

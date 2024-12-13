@@ -1,4 +1,4 @@
-import random
+import time
 from classes.person import Person
 
 class Reader(Person):
@@ -10,7 +10,7 @@ class Reader(Person):
         self.client_card_no = client_card_no
         
         self.status:int = status    # 1 - active, 2 - not active
-        self.id:str = f"c-{str(random.randint(100000,999999))}"     # c - client
+        self.id:str = f"c-{str(int(time.time() * 100))}"     # c - client
         
     def __str__(self):
         return (

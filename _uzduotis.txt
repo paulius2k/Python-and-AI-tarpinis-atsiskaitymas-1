@@ -38,6 +38,11 @@ Taip pat prisekite word failą, kuriame bus tokie dalykai.
 
 1. Įsivertinti save, kažkokiu tai pažymiu iki 10
 2. Parašyti, kas patiko ar nepatiko darbo metu
+- užmirštu "push" užbaigtą funkcionalumą atskiroje šakoje, pradedu kurti kitą funkcionalumą, o paskui kai prisimenu, 
+gaunasi kad sukuriu pull request tiek senam, tiek jau pradėtam naujam  funkcionalumui
+- šakoje pakeičiu failų pavadinimus (pvz pirmą raidę vietoj CAP, darau lowercase), sumerge'inu į main, vėliau kuriant naują šaką, 
+man kartais ateina senas failo pavadinimas su Cap pirma raide
+
 3. Kas buvo naujo, ko išmokote
 - pradėjau labiau mėgti metodus klasėse ir mažiau kurti išorinių funkcijų
 - pabandymai naudoti paprastą git merge'inimą (pvz. per Git Graph) vs. git pull request

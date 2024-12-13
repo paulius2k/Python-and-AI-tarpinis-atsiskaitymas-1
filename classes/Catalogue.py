@@ -12,15 +12,17 @@ class Catalogue:
     """
     def __init__(self):
         # First try to load data from file if such exists
-        if os.path.isfile(const.CATALOGUE_FILE_NAME):
-            with open(const.CATALOGUE_FILE_NAME, "rb") as file:
-                obj = pickle.load(file)
+        try:
+            if os.path.isfile(const.CATALOGUE_FILE_NAME):
+                with open(const.CATALOGUE_FILE_NAME, "rb") as file:
+                    obj = pickle.load(file)
 
-            # copy all attributes from the loaded object to self
-            self.__dict__.update(obj.__dict__)
-            
-        else:
-            self.items = []
+                # copy all attributes from the loaded object to self
+                self.__dict__.update(obj.__dict__)
+            else:
+                self.items = []
+        except Exception:
+            self.items = []        
         
     def __str__(self):
         result = ""
@@ -140,7 +142,7 @@ class Catalogue:
         
         return found_items
     
-    def delete_item(self, id):
+    def delete_item(self, id:str):
         """Marks item as deleted"""
         
         result = ()
@@ -158,4 +160,29 @@ class Catalogue:
         
         return result
     
-    
+    def update_item_balance(self, id:str, change_amount: int):
+        """Updates available units of the item after lend/return transaction"""
+        
+        result = ()
+        
+        try:
+            for item in self.items:
+                if item.id == id:
+                    new_amount = item.available_amount + change_amount
+                     
+                    if new_amount < 0 or item.available_amount < 0:
+                        result = (0, "\nThere are no available units of this item in the library.")
+                        break    
+                    elif new_amount > item.total_amount:
+                        result = (0, "\nAmount of available units after the transaction would exceed the total units owned by the library. Transaction not possible.")
+                        break
+                    else:
+                        dump_result = self._dump_data_to_storage()
+                        result = (1, "\nItem deleted successfully")
+                        break
+                else:
+                    result = (0, "\nSuch item not found in the catalogue.")
+        except Exception as err:
+            result = (0, f"Error deleting item: {err}\n")
+        
+        return result 

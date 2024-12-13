@@ -168,5 +168,4 @@ cython_debug/
 #.idea/
 
 # Specific files
-_test.py
-_test2.py
+_test*.py

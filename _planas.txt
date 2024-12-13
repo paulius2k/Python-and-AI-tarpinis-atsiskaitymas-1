@@ -105,25 +105,37 @@ views
 
             LIBRARIAN MENU STRUCTURE:
             ----------------------
-            LEND ITEM
-                - SEARCH ITEM
-                    -- {ITEM} ACTIONS MENU
 
-            RETURN ITEM
-                - SEARCH READER
-                    -- {READER} ACTIONS MENU
-
-            LIBRARY CATALOGUE
-                - LIST ALL ITEMS
-                    -- {ITEM} ACTIONS MENU
+            • LIBRARY CATALOGUE (incl. LEND ITEM)
                 - SEARCH FOR ITEM
-                    -- {ITEM} ACTIONS MENU
+                    -- {SELECTED ITEM} ACTIONS MENU
+                        --- LEND ITEM (workflow: --> search for reader --> new LEND transaction)
+                        --- DELETE ITEM (yes/no)
+                - LIST ALL ITEMS
+                    -- {SELECTED ITEM} ACTIONS MENU
+                        --- LEND ITEM (workflow: --> search for reader --> new LEND transaction)
+                        --- DELETE ITEM (yes/no)
+                --------------------------------------------
                 - ADD NEW BOOK
                 - DELETE BOOK
-                    - SEARCH ITEM
-                        -- {ITEM} ACTIONS MENU
+                    -- SEARCH ITEM
+                        --- {SELECTED ITEM} ACTIONS MENU
+                            ---- LEND ITEM (workflow: --> search for reader --> new LEND transaction)
+                            ---- DELETE ITEM (yes/no)
+                --------------------------------------------
                 - LIST DELETED ITEMS
                 - CATALOGUE STATISTICS
+
+            • CLIENTS (incl. RETURN ITEM)
+                - SEARCH FOR A READER
+                    -- {READER} ACTIONS MENU
+                        --- LIST ACTIVE TRANSACTIONS
+                            ---- {SELECTED TRANSACTION} ACTIONS MENU
+                                ----- RETURN ITEM
+                        --- LIST CLOSED TRANSACTIONS
+                        --- DEACTIVATE READER (yes/no)
+                - REGISTER NEW READER
+
 
 
         def {other_menus}:
