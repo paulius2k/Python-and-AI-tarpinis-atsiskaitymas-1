@@ -149,14 +149,17 @@ class Registry:
                     finish_dt = finish_dt_dt,
                     comment = answers["comment"],
                     ts_modified = datetime.today()
-                )
+                )           
+
+                # FIRST: try UPDATING item balance in the catalogue
+                balance_update_result = items_catalogue.update_item_balance(item_id, change_amount)
                 
-                self.items.append(new_item)               
-                # save data to file
-                result = self._dump_data_to_storage()
-                
-                # UPDATE item balance in the catalogue
-                items_catalogue.update_item_balance(item_id, change_amount)
+                if balance_update_result[0] == 1:
+                    # ONLY THEN save the transaction
+                    self.items.append(new_item)   
+                    result = self._dump_data_to_storage()
+                else:                
+                    result = balance_update_result
                 
                 
         except KeyboardInterrupt as err:

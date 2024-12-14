@@ -153,7 +153,17 @@ class Clients:
                         found_clients.append(item)     
 
         return found_clients
-                
+
+    def get_client_by_id(self, id):
+        """Returns a clients by its id"""
+        
+        if self.items:                
+            for item in self.items:
+                if item.id == id:
+                    found_client = item
+
+        return found_client
+               
     def deactivate_client(self, id):
         """Marks a client as non-active"""
         

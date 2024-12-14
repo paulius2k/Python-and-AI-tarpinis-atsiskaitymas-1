@@ -84,8 +84,16 @@ def list_clients_dynamic(data: Clients, scope_msg = ""):
             col_width = 20
             col_width_narrow = 9
             
-            header = f"{"Eil.nr":<{col_width_narrow}}{"Name":<{col_width}}{"Last name":<{col_width}}{"Date of birth":<{col_width}}{"Card #":<{col_width_narrow}}{"Status":>{col_width_narrow}}"
-
+            
+            header = (
+                    f"{"Eil.nr":<{col_width_narrow}}"
+                    f"{"Name":<{col_width}}"
+                    f"{"Last name":<{col_width}}"
+                    f"{"Date of birth":<{col_width}}"
+                    f"{"Card #":<{col_width_narrow}}"
+                    f"{"Status":>{col_width_narrow}}"
+            )
+            
             inquirer_msg_text = f"Keys: ↑, ↓ - to move, ENTER - to choose action with item, ESC - to exit\n"        
             inquirer_msg_text += f"\n  {scope_msg} (found: {len(data)})\n"
             inquirer_msg_text += f"  {big_separator}\n  {header}\n  {small_separator}\n"
@@ -109,7 +117,14 @@ def list_clients_dynamic(data: Clients, scope_msg = ""):
                     status_string = "Not Active"
 
 
-                item_line = f"{idx:<{col_width_narrow}}{name_checked:<{col_width}}{lastname_checked:<{col_width}}{dob_string:<{col_width}}{item.client_card_no:<{col_width_narrow}}{status_string:>{col_width_narrow}}"
+                item_line = (
+                    f"{idx:<{col_width_narrow}}"
+                    f"{name_checked:<{col_width}}"
+                    f"{lastname_checked:<{col_width}}"
+                    f"{dob_string:<{col_width}}"
+                    f"{item.client_card_no:<{col_width_narrow}}"
+                    f"{status_string:>{col_width_narrow}}"
+                )
                 clients_list.append(Choice(value=item.id, name=item_line))   
         
             selected_client_id = inquirer.select(
@@ -125,7 +140,7 @@ def list_clients_dynamic(data: Clients, scope_msg = ""):
         
     return {"error": error, "msg": msg, "selected_client_id": selected_client_id}
 
-def list_transactions_dynamic(data: Registry, scope_msg = ""):
+def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, scope_msg = ""):
     """
     Generates a dynamic list of client transactions on the screen for viewing and actions.
     """
@@ -133,21 +148,43 @@ def list_transactions_dynamic(data: Registry, scope_msg = ""):
     error = 0
     msg = ""
     tx_list = []
-    selected_client_id = None
+    selected_tx_id = None
     
     try:
 
-        if len(data) == 0:
+        if len(registry_items) == 0:
             display_text = f"\n  No transactions found.\n"
             print(display_text)
             wait_for_keypress = input("Press ENTER to continue...")
             
         else:
-            big_separator = f"{"=" * 110}"
-            small_separator = f"{"-" * 110}"
+            big_separator = f"{"=" * 150}"
+            small_separator = f"{"-" * 150}"
             col_width = 20
-            col_width_narrow = 9
+            col_width_narrow = 8
+            col_width_mid = 12
+            col_width_wide = 25
             
+                        
+            header = (
+                f"{"Eil.nr":<{col_width_narrow}}"
+                f"{"Title":<{col_width}}"
+                f"{"Author":<{col_width}}"
+                f"{"Year":<{col_width_narrow}}"
+                f"{"Start":<{col_width_mid}}"
+                f"{"Deadline":<{col_width_mid}}"
+                f"{"Action":<{col_width_narrow}}"
+                f"{"Pcs.":<{col_width_narrow}}"
+                f"{"Status":<{col_width_narrow}}"
+                f"{"Comment":<{col_width_wide}}"
+            )
+            
+            inquirer_msg_text = f"Keys: ↑, ↓ - to move, ENTER - to choose action with item, ESC - to exit\n"        
+            inquirer_msg_text += f"\n  {scope_msg} (found: {len(registry_items)})\n"
+            inquirer_msg_text += f"  {big_separator}\n  {header}\n  {small_separator}\n"
+            
+            for idx, item in enumerate(registry_items, start=1):
+                
         # self.client_id:str = client_id
         # self.item_id:str = item_id
         # self.amount:int = amount                    # amount of items
@@ -156,36 +193,61 @@ def list_transactions_dynamic(data: Registry, scope_msg = ""):
         # self.start_dt:datetime = start_dt           # e.g. lending period start date
         # self.finish_dt:datetime = finish_dt         # e.g. lending period deadline date
         # self.comment: str = comment                 # free text comment
-            
-            header = f"{"Eil.nr":<{col_width_narrow}}{"Name":<{col_width}}{"Last name":<{col_width}}{"Date of birth":<{col_width}}{"Card #":<{col_width_narrow}}{"Status":>{col_width_narrow}}"
-
-            inquirer_msg_text = f"Keys: ↑, ↓ - to move, ENTER - to choose action with item, ESC - to exit\n"        
-            inquirer_msg_text += f"\n  {scope_msg} (found: {len(data)})\n"
-            inquirer_msg_text += f"  {big_separator}\n  {header}\n  {small_separator}\n"
-            
-            for idx, item in enumerate(data, start=1):
-                if len(item.name) >= col_width:
-                    name_checked = f"{item.name[:col_width-5].strip()}..."
+                
+                catalogue_item = catalogue_data.get_item_by_id(item.item_id)
+                
+                # name formatting by length
+                if len(catalogue_item.title) >= col_width:
+                    title_checked = f"{catalogue_item.title[:col_width-5].strip()}..."
                 else:
-                    name_checked = item.name
+                    title_checked = catalogue_item.title
                 
-                if len(item.last_name) >= col_width:
-                    lastname_checked = f"{item.last_name[:col_width-5].strip()}..."
+                if len(catalogue_item.author) >= col_width:
+                    author_checked = f"{catalogue_item.author[:col_width-5].strip()}..."
                 else:
-                    lastname_checked = item.last_name
-                
-                dob_string = datetime.strftime(item.dob, "%Y-%m-%d")
-                
-                if item.status == 1:
-                    status_string = "Active"
-                elif item.status == 2:
-                    status_string = "Not Active"
+                    author_checked = catalogue_item.author
 
+                if len(item.comment) >= col_width:
+                    comment_checked = f"{item.comment[:col_width-5].strip()}..."
+                else:
+                    comment_checked = item.comment
+                
+                # date formatting
+                start_dt_string = datetime.strftime(item.start_dt, "%Y-%m-%d")
+                finish_dt_string = datetime.strftime(item.finish_dt, "%Y-%m-%d")
+                
+                # status parsing to words
+                txn_type_dict = {1: "LEND", 2: "RETURN"}
+                txn_status_dict = {1: "Open", 2: "Closed"}
 
-                item_line = f"{idx:<{col_width_narrow}}{name_checked:<{col_width}}{lastname_checked:<{col_width}}{dob_string:<{col_width}}{item.client_card_no:<{col_width_narrow}}{status_string:>{col_width_narrow}}"
-                tx_list.append(Choice(value=item.id, name=item_line))   
+                # f"{"Eil.nr":<{col_width_narrow}}"
+                # f"{"Title":<{col_width}}"
+                # f"{"Author":<{col_width}}"
+                # f"{"Year":<{col_width_narrow}}"
+                # f"{"Start":<{col_width_narrow}}"
+                # f"{"Deadline":>{col_width_narrow}}"
+                # f"{"Action":>{col_width_narrow}}"
+                # f"{"Pcs.":<{col_width}}"
+                # f"{"Status":>{col_width_narrow}}"
+                # f"{"Comment":>{col_width}}"
+
+                item_line = (
+                    f"{idx:<{col_width_narrow}}"
+                    f"{title_checked:<{col_width}}"
+                    f"{author_checked:<{col_width}}"
+                    f"{catalogue_item.publication_year:<{col_width_narrow}}"
+                    f"{start_dt_string:<{col_width_mid}}"
+                    f"{finish_dt_string:<{col_width_mid}}"
+                    f"{txn_type_dict[item.txn_type]:<{col_width_narrow}}"
+                    f"{item.amount:<{col_width_narrow}}"
+                    f"{txn_status_dict[item.txn_type]:<{col_width_narrow}}"
+                    f"{comment_checked:<{col_width_wide}}"
+                                        
+                    )      
+                   
+                tx_list.append(Choice(value=item._id, name=item_line))   
         
-            selected_client_id = inquirer.select(
+            selected_tx_id = inquirer.select(
                 message=inquirer_msg_text,
                 choices=tx_list,
                 default=1,
@@ -197,5 +259,5 @@ def list_transactions_dynamic(data: Registry, scope_msg = ""):
         error = 1
         msg = f"Error printing transactions. {err}\n"
         
-    return {"error": error, "msg": msg, "selected_client_id": selected_client_id}
+    return {"error": error, "msg": msg, "selected_tx_id": selected_tx_id}
 

@@ -142,6 +142,16 @@ class Catalogue:
         
         return found_items
     
+    def get_item_by_id(self, id):
+        """Returns a item by its id"""
+        
+        if self.items:                
+            for item in self.items:
+                if item.id == id:
+                    found_item = item     
+                    break
+        return found_item
+    
     def delete_item(self, id:str):
         """Marks item as deleted"""
         
@@ -168,21 +178,22 @@ class Catalogue:
         try:
             for item in self.items:
                 if item.id == id:
-                    new_amount = item.available_amount + change_amount
+                    new_amount = item.available_units + change_amount
                      
-                    if new_amount < 0 or item.available_amount < 0:
+                    if new_amount < 0 or item.available_units < 0:
                         result = (0, "\nThere are no available units of this item in the library.")
                         break    
-                    elif new_amount > item.total_amount:
+                    elif new_amount > item.total_units:
                         result = (0, "\nAmount of available units after the transaction would exceed the total units owned by the library. Transaction not possible.")
                         break
                     else:
+                        item.available_units = new_amount
                         dump_result = self._dump_data_to_storage()
-                        result = (1, "\nItem deleted successfully")
+                        result = (1, "\nItem updated successfully")
                         break
                 else:
                     result = (0, "\nSuch item not found in the catalogue.")
         except Exception as err:
-            result = (0, f"Error deleting item: {err}\n")
+            result = (0, f"Error updating item: {err}\n")
         
         return result 

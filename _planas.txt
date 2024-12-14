@@ -115,6 +115,7 @@ views
                     -- {SELECTED ITEM} ACTIONS MENU
                         --- LEND ITEM (workflow: --> search for reader --> new LEND transaction)
                         --- DELETE ITEM (yes/no)
+                - LIST OVERDUE ITEMS
                 --------------------------------------------
                 - ADD NEW BOOK
                 - DELETE BOOK
