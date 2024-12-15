@@ -3,6 +3,8 @@
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
+from InquirerPy import get_style
+
 import os
 from datetime import datetime
 
@@ -313,6 +315,12 @@ def main_menu_selection():
     """
     Menu item display and user selection capture and return to main menu logic.
     """
+    my_style = {
+        "marker": "> ",  # Use ASCII for the selected marker
+        "selected_pointer": ">> ",  # Selected pointer in ASCII
+        "questionmark": "?",
+        }
+  
 
     selected_action = inquirer.select(
         message="\nMAIN LIBRARY MENU. SELECT AN AREA TO WORK WITH:\n",
@@ -328,7 +336,7 @@ def main_menu_selection():
         default=1,
         keybindings={"interrupt": [{"key": "escape"}]},
         raise_keyboard_interrupt=False,
-
+        pointer=">>",
     ).execute()
 
         
@@ -361,7 +369,7 @@ def catalogue_menu_selection():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-
+            pointer=">>",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -384,7 +392,7 @@ def clients_menu_selection():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-
+            pointer=">>",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -407,7 +415,7 @@ def selected_item_menu():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-
+            pointer=">>",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -432,6 +440,7 @@ def selected_client_menu():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
+            pointer=">>",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -453,7 +462,7 @@ def selected_transaction_menu():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-
+            pointer=">>",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -474,7 +483,7 @@ def user_confirmation(prompt_text = "Yes or no"):
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-
+            pointer=">>",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
