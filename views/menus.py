@@ -7,6 +7,7 @@ from InquirerPy import get_style
 
 import os
 from datetime import datetime
+from datetime import timedelta
 
 import modules.item_actions as item_actions
 import modules.client_actions as client_actions
@@ -206,7 +207,7 @@ def item_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry, 
                     print()
                     print(f"NEW LENDING TRANSACTION: *{item.title} ({item.author}, {item.publication_year})* to *{client.name} {client.last_name} (b.{client.dob.strftime("%Y-%m-%d")})*")
                     print()
-                    creation_result = registry.new_transaction(items_catalogue=catalogue, client_id=client_id, item_id=item_id, max_amount=item.available_units, txn_type=1, start_dt=datetime.today())
+                    creation_result = registry.new_transaction(items_catalogue=catalogue, client_id=client_id, item_id=item_id, max_amount=item.available_units, txn_type=1, start_dt=datetime.today(), finish_dt=datetime.today() + timedelta(days=30))
 
                     print()
                     
@@ -323,7 +324,7 @@ def main_menu_selection():
   
 
     selected_action = inquirer.select(
-        message="\nMAIN LIBRARY MENU. SELECT AN AREA TO WORK WITH:\n",
+        message="\nMAIN LIBRARY MENU. SELECT AN AREA TO WORK WITH:",
         choices=[
             # Choice(value="lend", name="• LEND ITEM •"),
             # Choice(value="return", name="• RETURN ITEM •"),

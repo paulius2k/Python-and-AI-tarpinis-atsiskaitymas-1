@@ -78,7 +78,12 @@ class Registry:
                 default_start_dt = start_dt.strftime("%Y-%m-%d")
             else:
                 default_start_dt = ""
-                
+
+            if finish_dt:
+                default_finish_dt = finish_dt.strftime("%Y-%m-%d")
+            else:
+                default_finish_dt = ""
+                               
             return_dt_dt = ""
             
             if int(txn_type) == 1:      # lend
@@ -150,7 +155,8 @@ class Registry:
                 questions.append(                       
                     {
                         "type": "input", 
-                        "message": "Deadline date (YYYY-MM-DD):", 
+                        "message": "Return date (YYYY-MM-DD):", 
+                        "default": default_finish_dt,    
                         "validate": from_date_validator_with_params,
                         "invalid_message": "format YYYY-MM-DD.",
                         "name": "finish_dt"
