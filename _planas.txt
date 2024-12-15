@@ -103,41 +103,34 @@ views
         def show_main_menu():
             """
 
-            LIBRARIAN MENU STRUCTURE:
+            LIBRARY MENU STRUCTURE:
             ----------------------
 
             • LIBRARY CATALOGUE (incl. LEND ITEM)
-                - SEARCH FOR ITEM
+                - 1. SEARCH FOR ITEM
                     -- {SELECTED ITEM} ACTIONS MENU
                         --- LEND ITEM (workflow: --> search for reader --> new LEND transaction)
                         --- DELETE ITEM (yes/no)
-                - LIST ALL ITEMS
+                - 2. LIST ALL ITEMS
                     -- {SELECTED ITEM} ACTIONS MENU
                         --- LEND ITEM (workflow: --> search for reader --> new LEND transaction)
                         --- DELETE ITEM (yes/no)
-                - LIST OVERDUE ITEMS
+                - 3. LIST OVERDUE ITEMS
                     -- {SELECTED TRANSACTION} ACTIONS MENU
                         --- RETURN ITEM
                 --------------------------------------------
-                - ADD NEW BOOK
-                - DELETE BOOK
-                    -- SEARCH ITEM
-                        --- {SELECTED ITEM} ACTIONS MENU
-                            ---- LEND ITEM (workflow: --> search for reader --> new LEND transaction)
-                            ---- DELETE ITEM (yes/no)
-                --------------------------------------------
-                - LIST DELETED ITEMS
-                - CATALOGUE STATISTICS
-
+                - 4. ADD NEW BOOK
+                - 5. LIST DELETED ITEMS
+            ------------------------------------------------
             • CLIENTS (incl. RETURN ITEM)
-                - SEARCH FOR A READER
+                - 1. SEARCH FOR A READER
                     -- {READER} ACTIONS MENU
                         --- LIST BORROWED BOOKS
                             ---- {SELECTED TRANSACTION} ACTIONS MENU
                                 ----- RETURN ITEM
                         --- LIST CLOSED TRANSACTIONS
                         --- DEACTIVATE READER (yes/no)
-                - REGISTER NEW READER
+                - 2. REGISTER NEW READER
 
 
 

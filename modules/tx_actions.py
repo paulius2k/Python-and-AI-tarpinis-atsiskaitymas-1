@@ -32,27 +32,3 @@ def prepare_to_list_transactions(registry: Registry, catalogue: Catalogue, clien
         msg = f"Error listing items: {err}"
     
     return (error, msg, selected_item)
-
-def mark_overdue_transactions(registry: Registry):
-    
-    try:
-        today_dt = datetime.today()
-        today_dt = today_dt.replace(hour=0, minute=0, second=0, microsecond=0)
-        
-        counter = 0
-        if registry:
-            for item in registry.items:
-                if item.txn_status == 1 and item.txn_type == 1:
-                    if item.finish_dt < today_dt:
-                        item.txn_status = 3
-                        counter += 1
-        
-        if counter > 0:
-            result = registry._dump_data_to_storage()
-        else:
-            result = (0, "No overdue records found")
-    
-    except Exception as err:
-        result = (0, "Error processing records")
-        
-    return result

@@ -192,21 +192,30 @@ def item_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry, 
                 print(f"\nSelected client id: {client_id}\n")
                 client = clients.get_client_by_id(client_id)
                 
-                print()
-                print(f"NEW LENDING TRANSACTION: *{item.title} ({item.author}, {item.publication_year})* to *{client.name} {client.last_name} (b.{client.dob.strftime("%Y-%m-%d")})*")
-                print()
-                creation_result = registry.new_transaction(items_catalogue=catalogue, client_id=client_id, item_id=item_id, max_amount=item.available_units, txn_type=1, start_dt=datetime.today())
+                overdue_txns = []
+                overdue_txns = registry.get_transactions(client_id=client_id, txn_status_set={3})
+                if len(overdue_txns) > 0:
+                    print(f"\nLending not possible, as the client has {len(overdue_txns)} overdue item(s).")
+                    print("Please return these items before borrowing again.")
+                    print()
+                    wait_for_keypress = input("Press ENTER to continue...")
+                
+                else:
+                    print()
+                    print(f"NEW LENDING TRANSACTION: *{item.title} ({item.author}, {item.publication_year})* to *{client.name} {client.last_name} (b.{client.dob.strftime("%Y-%m-%d")})*")
+                    print()
+                    creation_result = registry.new_transaction(items_catalogue=catalogue, client_id=client_id, item_id=item_id, max_amount=item.available_units, txn_type=1, start_dt=datetime.today())
 
-                print()
-                
-                if creation_result[0] == 1:
-                    print("Lending transaction created successfully.")
-                
-                elif creation_result[0] == 0:
-                    print(f"Lending failed: {creation_result[1]}")
+                    print()
                     
-                print()
-                wait_for_keypress = input("Press ENTER to continue...") 
+                    if creation_result[0] == 1:
+                        print("Lending transaction created successfully.")
+                    
+                    elif creation_result[0] == 0:
+                        print(f"Lending failed: {creation_result[1]}")
+                        
+                    print()
+                    wait_for_keypress = input("Press ENTER to continue...") 
         
         case "delete_item":
             answer = user_confirmation("Do you really want to delete the item?")
@@ -293,8 +302,7 @@ def reader_menu_logic(registry: Registry, clients: Clients, catalogue: Catalogue
         
             if txn_id:
                 print(f"\nThere are no available actions with this transaction\n")
-                
-            # wait_for_keypress = input("Press ENTER to continue...") 
+                wait_for_keypress = input("Press ENTER to continue...") 
         
         case "deactivate":
             pass
@@ -305,8 +313,9 @@ def main_menu_selection():
     """
     Menu item display and user selection capture and return to main menu logic.
     """
+
     selected_action = inquirer.select(
-        message="\nLIBRARIAN MENU. SELECT AN AREA TO WORK WITH:\n",
+        message="\nMAIN LIBRARY MENU. SELECT AN AREA TO WORK WITH:\n",
         choices=[
             # Choice(value="lend", name="• LEND ITEM •"),
             # Choice(value="return", name="• RETURN ITEM •"),
@@ -322,6 +331,7 @@ def main_menu_selection():
 
     ).execute()
 
+        
     return selected_action    
                     
 def catalogue_menu_selection():
@@ -332,66 +342,75 @@ def catalogue_menu_selection():
     a library catalogue, such as searching for books, adding new books, or 
     deleting books from the catalogue.
     """
-    selected_action = inquirer.select(
-        message="Select action:",
-        choices=[
-            Choice(value="search", name="1. SEARCH for item"),
-            Choice(value="list_all", name="2. LIST all items"),
-            Choice(value="list_overdue", name="3. List OVERDUE items"),           
-            Separator(),
-            Choice(value="add", name="4. ADD new book"),
-            Choice(value="delete", name="5. DELETE a book"),
-            Separator(),
-            Choice(value="list_del", name="6. List deleted items"),
-            Choice(value="stats", name="7. Catalogue statistics"),
-            Separator(),
-            Choice(value=99, name="Back to main menu"),
-        ],
-        default=1,
-        keybindings={"interrupt": [{"key": "escape"}]},
-        raise_keyboard_interrupt=False,
+    try:
+        selected_action = inquirer.select(
+            message="Select action:",
+            choices=[
+                Choice(value="search", name="1. SEARCH for item"),
+                Choice(value="list_all", name="2. LIST all items"),
+                Choice(value="list_overdue", name="3. List OVERDUE items"),           
+                Separator(),
+                Choice(value="add", name="4. ADD new book"),
+                # Choice(value="delete", name="5. DELETE a book"),
+                # Separator(),
+                Choice(value="list_del", name="5. List deleted items"),
+                # Choice(value="stats", name="7. Catalogue statistics"),
+                Separator(),
+                Choice(value=99, name="Back to main menu"),
+            ],
+            default=1,
+            keybindings={"interrupt": [{"key": "escape"}]},
+            raise_keyboard_interrupt=False,
 
-    ).execute()
-
+        ).execute()
+    except KeyboardInterrupt:
+        selected_action = None  # Cancel operation if user interrupts the process.
+        
     return selected_action
 
 def clients_menu_selection():
     """
     Menu item display and user selection capture and return to main menu logic.
     """
-    selected_action = inquirer.select(
-        message="Select action:",
-        choices=[
-            Choice(value="search_reader", name="1. SEARCH for a reader"),
-            Choice(value="new_reader", name="2. Register NEW reader"),
-            Separator(),
-            Choice(value=99, name="Back to main menu"),
-        ],
-        default=1,
-        keybindings={"interrupt": [{"key": "escape"}]},
-        raise_keyboard_interrupt=False,
+    try:
+        selected_action = inquirer.select(
+            message="Select action:",
+            choices=[
+                Choice(value="search_reader", name="1. SEARCH for a reader"),
+                Choice(value="new_reader", name="2. Register NEW reader"),
+                Separator(),
+                Choice(value=99, name="Back to main menu"),
+            ],
+            default=1,
+            keybindings={"interrupt": [{"key": "escape"}]},
+            raise_keyboard_interrupt=False,
 
-    ).execute()
-        
+        ).execute()
+    except KeyboardInterrupt:
+        selected_action = None  # Cancel operation if user interrupts the process.
+                    
     return selected_action
 
 def selected_item_menu():
     """
     Menu item display and user selection capture and return to main menu logic.
     """
-    selected_action = inquirer.select(
-        message="Select action with the item:",
-        choices=[
-            Choice(value="lend", name="1. LEND the item"),
-            Choice(value="delete_item", name="2. DELETE the item"),
-            Separator(),
-            Choice(value=99, name="Back to main menu"),
-        ],
-        default=1,
-        keybindings={"interrupt": [{"key": "escape"}]},
-        raise_keyboard_interrupt=False,
+    try:
+        selected_action = inquirer.select(
+            message="Select action with the item:",
+            choices=[
+                Choice(value="lend", name="1. LEND the item"),
+                Choice(value="delete_item", name="2. DELETE the item"),
+                Separator(),
+                Choice(value=99, name="Back to main menu"),
+            ],
+            default=1,
+            keybindings={"interrupt": [{"key": "escape"}]},
+            raise_keyboard_interrupt=False,
 
-    ).execute()
+        ).execute()
+    except KeyboardInterrupt:
+        selected_action = None  # Cancel operation if user interrupts the process.
         
     return selected_action
 
@@ -399,56 +418,65 @@ def selected_client_menu():
     """
     Menu item display and user selection capture and return to main menu logic.
     """
-    selected_action = inquirer.select(
-        message="Select action with the reader:",
-        choices=[
-            Choice(value="active_tx", name="1. List unreturned items"),
-            Choice(value="closed_tx", name="2. List old transactions"),
-            Separator(),
-            Choice(value="deactivate", name="3. Deactivate reader"),
-            Separator(),
-            Choice(value=99, name="Back to main menu"),
-        ],
-        default=1,
-        keybindings={"interrupt": [{"key": "escape"}]},
-        raise_keyboard_interrupt=False,
-    ).execute()
-        
+    try:
+        selected_action = inquirer.select(
+            message="Select action with the reader:",
+            choices=[
+                Choice(value="active_tx", name="1. List unreturned items"),
+                Choice(value="closed_tx", name="2. List old transactions"),
+                Separator(),
+                Choice(value="deactivate", name="3. Deactivate reader"),
+                Separator(),
+                Choice(value=99, name="Back to main menu"),
+            ],
+            default=1,
+            keybindings={"interrupt": [{"key": "escape"}]},
+            raise_keyboard_interrupt=False,
+        ).execute()
+    except KeyboardInterrupt:
+        selected_action = None  # Cancel operation if user interrupts the process.
+                
     return selected_action
 
 def selected_transaction_menu():
     """
     Menu item display and user selection capture and return to main menu logic.
     """
-    selected_action = inquirer.select(
-        message="Select action with the item:",
-        choices=[
-            Choice(value="return", name="1. RETURN the item"),
-            Separator(),
-            Choice(value=99, name="Back to main menu"),
-        ],
-        default=1,
-        keybindings={"interrupt": [{"key": "escape"}]},
-        raise_keyboard_interrupt=False,
+    try:
+        selected_action = inquirer.select(
+            message="Select action with the item:",
+            choices=[
+                Choice(value="return", name="1. RETURN the item"),
+                Separator(),
+                Choice(value=99, name="Back to main menu"),
+            ],
+            default=1,
+            keybindings={"interrupt": [{"key": "escape"}]},
+            raise_keyboard_interrupt=False,
 
-    ).execute()
-        
+        ).execute()
+    except KeyboardInterrupt:
+        selected_action = None  # Cancel operation if user interrupts the process.
+      
     return selected_action
 
 def user_confirmation(prompt_text = "Yes or no"):
     """
     Menu item display and user selection capture and return to main menu logic.
     """
-    selected_action = inquirer.select(
-        message=prompt_text,
-        choices=[
-            Choice(value="yes", name="YES"),
-            Choice(value="no", name="NO"),
-        ],
-        default=1,
-        keybindings={"interrupt": [{"key": "escape"}]},
-        raise_keyboard_interrupt=False,
+    try:
+        selected_action = inquirer.select(
+            message=prompt_text,
+            choices=[
+                Choice(value="yes", name="YES"),
+                Choice(value="no", name="NO"),
+            ],
+            default=1,
+            keybindings={"interrupt": [{"key": "escape"}]},
+            raise_keyboard_interrupt=False,
 
-    ).execute()
-        
+        ).execute()
+    except KeyboardInterrupt:
+        selected_action = None  # Cancel operation if user interrupts the process.
+                
     return selected_action

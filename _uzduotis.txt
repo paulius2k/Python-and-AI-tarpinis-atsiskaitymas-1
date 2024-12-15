@@ -8,10 +8,10 @@ Instructions
     OK   2.b) -galima daryti pagal išleidimo metus, jeigu senesnis nei x išmetam.
     OK   3. Skaitytojai turėtų galėti pasiimti knygą išsinešimui (knygų kiekis ribotas)
     OK   4. Turėtų būti galimybė ieškoti knygų bibliotekoje, pagal knygos pavadinimą arba autorių.
-5. Knygos išduodamos tik tam tikram laikui, jeigu knygos negrąžinamos iki išduotos datos, jos skaitomos vėluojančiomis (angl. Overdue).
+    OK   5. Knygos išduodamos tik tam tikram laikui, jeigu knygos negrąžinamos iki išduotos datos, jos skaitomos vėluojančiomis (angl. Overdue).
     OK   6. Turi būti galima peržiūrėti visas bibliotekos knygas
-7. Turi būti galima peržiūrėti visas vėluojančias knygas
-8. Turi būti neleidžiama pasiimti knygos, jeigu skaitytojas turi vėluojančią knygą ir jis turi būti įspėtas, kad knyga vėluoja
+    OK   7. Turi būti galima peržiūrėti visas vėluojančias knygas
+    OK   8. Turi būti neleidžiama pasiimti knygos, jeigu skaitytojas turi vėluojančią knygą ir jis turi būti įspėtas, kad knyga vėluoja
  
 
 Bonus Balai (neprivaloma padaryti)

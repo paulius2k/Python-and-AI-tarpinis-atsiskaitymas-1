@@ -10,7 +10,7 @@ if __name__ == '__main__':
     new_registry = Registry()
     
     # mark all overdue transactions
-    tx_actions.mark_overdue_transactions(new_registry)
+    new_registry.mark_overdue_transactions()
     
     # call main manu loop
     main_menu_logic(new_catalogue, new_clients_db, new_registry)

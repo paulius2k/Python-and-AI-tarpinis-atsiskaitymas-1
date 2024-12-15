@@ -23,6 +23,9 @@ def list_catalogue_dynamic(data: Catalogue, scope_msg = ""):
             wait_for_keypress = input("Press ENTER to continue...")
             
         else:
+            os.system('cls')  
+            print()
+            
             big_separator = f"{"=" * 145}"
             small_separator = f"{"-" * 145}"
             col_width = 30
