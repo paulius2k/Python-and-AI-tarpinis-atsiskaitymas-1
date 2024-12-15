@@ -130,7 +130,7 @@ views
             • CLIENTS (incl. RETURN ITEM)
                 - SEARCH FOR A READER
                     -- {READER} ACTIONS MENU
-                        --- LIST ACTIVE TRANSACTIONS
+                        --- LIST BORROWED BOOKS
                             ---- {SELECTED TRANSACTION} ACTIONS MENU
                                 ----- RETURN ITEM
                         --- LIST CLOSED TRANSACTIONS

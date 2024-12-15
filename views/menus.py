@@ -159,7 +159,7 @@ def item_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry, 
             # check if there item balance is not 0, else stop lending process
             item = catalogue.get_item_by_id(item_id)
             if item.available_units == 0:
-                print("Item is out of stock.")
+                print("\nThere are no available copies of this item.")
                 print()
                 wait_for_keypress = input("Press ENTER to continue...")
                 return
@@ -179,9 +179,9 @@ def item_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry, 
                 client = clients.get_client_by_id(client_id)
                 
                 print()
-                print(f"NEW LENDING TRANSACTION: *{item.title} ({item.publication_year})* to *{client.name} {client.last_name} (b.{client.dob.strftime("%Y-%m-%d")})*")
+                print(f"NEW LENDING TRANSACTION: *{item.title} ({item.author}, {item.publication_year})* to *{client.name} {client.last_name} (b.{client.dob.strftime("%Y-%m-%d")})*")
                 print()
-                creation_result = registry.new_transaction(catalogue, client_id, item_id, item.available_units, 1, datetime.today())
+                creation_result = registry.new_transaction(items_catalogue=catalogue, client_id=client_id, item_id=item_id, max_amount=item.available_units, txn_type=1, start_dt=datetime.today())
 
                 print()
                 
@@ -208,20 +208,41 @@ def item_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry, 
                 
             wait_for_keypress = input("Press ENTER to continue...")       
 
-def tx_menu_logic(catalogue: Catalogue, item_id):
+def txn_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry, txn_id):
     """
-    Catalogue item menu, gives options for item management, 
+    Registry transaction menu, gives options for transaction management, 
     gets user input and calls specific feature methods.
     """
     item_action = selected_transaction_menu()
 
     match item_action:
         case "return":
-            # pseudo:
-            # registry.new_transaction(type="return")    
+            transaction = registry.get_transaction_by_id(txn_id)
+            client_id = transaction.client_id
+            item_id = transaction.item_id
+            client = clients.get_client_by_id(client_id)
+            item = catalogue.get_item_by_id(item_id)
+        
+            print(f"\nSelected transaction id: {txn_id}\n")
+            
+            print()
+            print(f"RETURN TRANSACTION: *{item.title} ({item.author}, {item.publication_year})* from *{client.name} {client.last_name} (b.{client.dob.strftime("%Y-%m-%d")})*")
+            print()
+            #create a new "return" transaction
+            creation_result = registry.new_transaction(items_catalogue=catalogue, client_id=client_id, item_id=item_id, max_amount=transaction.amount, txn_type=2, start_dt="", finish_dt="")
+         
+            print()
+            
+            if creation_result[0] == 1:
+                # close the old "lend" transaction
+                update_result = registry.close_transaction(txn_id)
+                print("Return transaction created successfully.")
+            
+            elif creation_result[0] == 0:
+                print(f"Return transaction failed: {creation_result[1]}")
                 
-            wait_for_keypress = input("Press ENTER to continue...") 
-                                        
+            wait_for_keypress = input("\nPress ENTER to continue...")         
+                                                     
 def reader_menu_logic(registry: Registry, clients: Clients, catalogue: Catalogue, client_id):
     """
     Client-reader item menu, gives options for reader management, 
@@ -232,21 +253,37 @@ def reader_menu_logic(registry: Registry, clients: Clients, catalogue: Catalogue
     match item_action:
         case "active_tx":
             reader = clients.get_client_by_id(client_id)
-            top_msg = f"LISTING ACTIVE TRANSACTIONS OF *{reader.name} {reader.last_name}*"
-            list_result = tx_actions.prepare_to_list_transactions(registry=registry, catalogue=catalogue, txn_status=1, top_msg=top_msg)
+            top_msg = f"LISTING UNRETURNED ITEMS OF *{reader.name} {reader.last_name}*"
+            list_result = tx_actions.prepare_to_list_transactions(registry=registry, catalogue=catalogue, client_id=client_id, txn_status=1, top_msg=top_msg)
+            txn_id = list_result[2]
             
-            if list_result[0] == 0:
-                print("Search failed.")
+            if list_result[0] == 1:
+                print("Listing of transactions failed.")
+                print(list_result[1])
+                wait_for_keypress = input("Press ENTER to continue...") 
+
+            # if not list_result[1]:
+            #     wait_for_keypress = input("Press ENTER to continue...") 
+                
+            if txn_id:
+                print(f"\nSelected transaction id: {txn_id}\n")
+                txn_menu_logic(catalogue=catalogue, clients=clients, registry=registry, txn_id=txn_id)
+                
+    
+        case "closed_tx":
+            reader = clients.get_client_by_id(client_id)
+            top_msg = f"LISTING OLD TRANSACTIONS OF *{reader.name} {reader.last_name}*"
+            list_result = tx_actions.prepare_to_list_transactions(registry=registry, catalogue=catalogue, client_id=client_id, txn_status=2, top_msg=top_msg)
+            txn_id = list_result[2]
+            
+            if list_result[0] == 1:
+                print("Listing of transactions failed.")
                 print(list_result[1])
         
-            if list_result[2]:
-                pass
-                # print(f"\nSelected transaction id: {list_result[2]}\n")
-                # tx_menu_logic(catalogue, list_result[2])
+            if txn_id:
+                print(f"\nThere are no available actions with this transaction\n")
                 
             wait_for_keypress = input("Press ENTER to continue...") 
-        case "closed_tx":
-            pass
         
         case "deactivate":
             pass
@@ -354,8 +391,8 @@ def selected_client_menu():
     selected_action = inquirer.select(
         message="Select action with the reader:",
         choices=[
-            Choice(value="active_tx", name="1. List active transactions"),
-            Choice(value="closed_tx", name="2. List closed transactions"),
+            Choice(value="active_tx", name="1. List unreturned items"),
+            Choice(value="closed_tx", name="2. List old transactions"),
             Separator(),
             Choice(value="deactivate", name="3. Deactivate reader"),
             Separator(),

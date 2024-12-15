@@ -6,7 +6,7 @@ class Transaction:
     A transaction between the library and the client-reader (e.g. lending, returning am item)
     """
     
-    def __init__(self, client_id:str, item_id:str, amount:int, txn_type:int, txn_status:int, start_dt:datetime, finish_dt:datetime, ts_modified: datetime, comment:str = "", added_user_id:str = "u-999") -> None:
+    def __init__(self, client_id:str, item_id:str, amount:int, txn_type:int, txn_status:int, start_dt:datetime, finish_dt:datetime, ts_modified: datetime, return_dt = "", comment:str = "", added_user_id:str = "u-999") -> None:
         self.client_id:str = client_id
         self.item_id:str = item_id
         self.amount:int = amount                    # amount of items
@@ -14,6 +14,7 @@ class Transaction:
         self.txn_status:int = txn_status            # 1-open, 2-closed
         self.start_dt:datetime = start_dt           # e.g. lending period start date
         self.finish_dt:datetime = finish_dt         # e.g. lending period deadline date
+        self.return_dt:datetime = return_dt         # e.g. lending period deadline date
         self.comment: str = comment                 # free text comment
         self._added_user_id:str = added_user_id
         self._ts_modified:datetime = ts_modified
@@ -31,6 +32,7 @@ class Transaction:
             f"{self.txn_status}, "
             f"{self.start_dt}, "
             f"{self.finish_dt}, "
+            f"{self.return_dt}, "
             f"{self._added_user_id}]"
         )
     
@@ -45,6 +47,7 @@ class Transaction:
             f"{self.txn_status}, "
             f"{self.start_dt}, "
             f"{self.finish_dt}, "
+            f"{self.return_dt}, "
             f"{self._added_user_id})"
         )
     

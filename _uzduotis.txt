@@ -45,8 +45,14 @@ man kartais ateina senas failo pavadinimas su Cap pirma raide
 
 3. Kas buvo naujo, ko išmokote
 - pradėjau labiau mėgti metodus klasėse ir mažiau kurti išorinių funkcijų
-- pabandymai naudoti paprastą git merge'inimą (pvz. per Git Graph) vs. git pull request
-- dar kartą įsitikinau, kad klasės parametro tipo nurodymas klasės deklaracijoje NEREIŠKIA, kad toks tipas bus išsaugotas automatiškai: tą reikia užtikrinti programiškai
+- bandymai naudoti paprastą "git merge" (per Git Graph) lyginant su "git pull request": pirmas variantas greičiau, bet nėra užregistruojamas pull request,
+negalima peržiūrėti GitHub'e ir pateikti pastabų
+- dar kartą įsitikinau, kad klasės parametro tipo nurodymas klasės deklaracijoje NEREIŠKIA, 
+kad toks tipas bus ir išsaugotas: įrašant/išsaugojant parametrą reikia užtikrinti programiškai koks bus jo tipas, reikalui esant - konvertuoti. 
+Pvz. galvoji kad bus išsaugotas 1 (int), bet realiai iš vartotojo priimtas inputas yra išsaugomas kaip "1" (str).
+- kai funkcija priima keletą neprivalomų argumentų, geriau tą funkciją kviesti nurodant paduodamo parametro pavadinimą (pvz. statusas=1, o ne tiesiog "1"),
+nes gali būti, kad funkcija priims ne tą parametrą, kurį galvoji kad perduodi.
+
 
 4. Ar turite kokių pastebėjimų
 - vienas didesnių uždavinių yra išmokti rasti balansą tarp universalių ir atskirų funkcijų, kurios atlieka labai panašias užduotis.

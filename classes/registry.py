@@ -46,7 +46,7 @@ class Registry:
         
         return (result, msg)          
 
-    def new_transaction(self, items_catalogue: Catalogue, client_id, item_id, max_amount, txn_type, start_dt):
+    def new_transaction(self, items_catalogue: Catalogue, client_id, item_id, max_amount, txn_type, start_dt, finish_dt=""):
         """Register new transaction between the library and the client"""
         
         # custom date input validator for InquirerPy selection
@@ -65,61 +65,105 @@ class Registry:
                 return False
 
         result = ()
+        questions = []
+        prefilled_answers = {}
         
         try:       
             # inform user that new catalogue will be created because there was none found / or it was empty
             if not self.items:
                 print("Creating new registry.\n")
 
-
+            # prepare some variables and answers in advance, if we know them
+            if start_dt:
+                default_start_dt = start_dt.strftime("%Y-%m-%d")
+            else:
+                default_start_dt = ""
+                
+            return_dt_dt = ""
+            
             if int(txn_type) == 1:      # lend
                 txn_status = 1          # open
-                min_amount = 1
+
+                # amount
+                min_amount = 1               
                 default_amount = None
-                default_start_dt = start_dt.strftime("%Y-%m-%d")
+                ask_amount = True
+                
+                # dates
+                ask_start_dt = True
+                ask_finish_dt = True                
+
             elif int(txn_type) == 2:    # return
-                txn_status = 2          # closed                      
-                min_amount = max_amount
-                default_amount = max_amount    
-            
+                txn_status = 2          # closed                 
+                
+                # amount
+                prefilled_answers.update({"amount": max_amount})
+                ask_amount = False
+                
+                # dates                
+                prefilled_answers.update({"start_dt": default_start_dt})
+                ask_start_dt = False
+                
+                if finish_dt:
+                    default_finish_dt = finish_dt.strftime("%Y-%m-%d")
+                else:
+                    prefilled_answers.update({"finish_dt": ""})
+                    
+                ask_finish_dt = False                
+                
+                return_dt_dt = datetime.today()
+                prefilled_answers.update({"return_dt": return_dt_dt})
+                                
             from_date_validator_with_params = Validator.from_callable(
                 partial(datetime_validator, min=datetime.today(), max=datetime.today() + timedelta(days=30))
                 )   
             
-            
             # form a list of input fields to user (using InquirerPy library)
-            questions = [
-                {
-                    "type": "number", 
-                    "message": "Number of items:", 
-                    "min_allowed": min_amount,
-                    "max_allowed": max_amount,
-                    "default": default_amount,
-                    "validate": EmptyInputValidator(),
-                    "invalid_message": "Input should be number.",
-                    "name": "amount"
-                },
-                {
-                    "type": "input", 
-                    "message": "Starting date (YYYY-MM-DD):",
-                    "default": default_start_dt,                    
-                    "validate": from_date_validator_with_params,
-                    "invalid_message": "format YYYY-MM-DD, min today.",
-                    "name": "start_dt"
-                },
-                {
-                    "type": "input", 
-                    "message": "Deadline date (YYYY-MM-DD):", 
-                    "validate": from_date_validator_with_params,
-                    "invalid_message": "format YYYY-MM-DD.",
-                    "name": "finish_dt"
-                },
+            if ask_amount:
+                questions.append(
+                    {
+                        "type": "number", 
+                        "message": "Number of items:", 
+                        "min_allowed": min_amount,
+                        "max_allowed": max_amount,
+                        "default": default_amount,
+                        "validate": EmptyInputValidator(),
+                        "invalid_message": "Input should be number.",
+                        "name": "amount"
+                    }                
+                )
+            
+            if ask_start_dt:
+                questions.append(
+                    {
+                        "type": "input", 
+                        "message": "Starting date (YYYY-MM-DD):",
+                        "default": default_start_dt,                    
+                        "validate": from_date_validator_with_params,
+                        "invalid_message": "format YYYY-MM-DD, min today.",
+                        "name": "start_dt"
+                    }
+                )
+ 
+            if ask_finish_dt:
+                questions.append(                       
+                    {
+                        "type": "input", 
+                        "message": "Deadline date (YYYY-MM-DD):", 
+                        "validate": from_date_validator_with_params,
+                        "invalid_message": "format YYYY-MM-DD.",
+                        "name": "finish_dt"
+                    }
+                )
+            
+            questions.append( 
                 {
                     "type": "input", 
                     "message": "Comment (optional):",
                     "name": "comment",
-                },
-            ]
+                }
+            )
+
             
             # show a list of input fields to user and ask for data input
             answers = prompt(
@@ -127,12 +171,23 @@ class Registry:
                 keybindings={"interrupt": [{"key": "escape"}]},
                 # raise_keyboard_interrupt=False
                 )
-
+            
+            # merge answers from user with pre-filled answers
+            answers = {**prefilled_answers, **answers}
+            
             if answers:
                 
-                datetime_format = "%Y-%m-%d"  
-                start_dt_dt = datetime.strptime(answers["start_dt"], datetime_format)
-                finish_dt_dt = datetime.strptime(answers["finish_dt"], datetime_format)
+                datetime_format = "%Y-%m-%d"
+                
+                if answers["start_dt"]:
+                    start_dt_dt = datetime.strptime(answers["start_dt"], datetime_format)                    
+                else:
+                    start_dt_dt = ""
+                
+                if answers["finish_dt"]:
+                    finish_dt_dt = datetime.strptime(answers["finish_dt"], datetime_format)
+                else:
+                    finish_dt_dt = ""
                 
                 if int(txn_type) == 1:      # lend
                     change_amount = int(answers["amount"]) * (-1)
@@ -147,6 +202,7 @@ class Registry:
                     txn_status = txn_status,
                     start_dt = start_dt_dt,
                     finish_dt = finish_dt_dt,
+                    return_dt = return_dt_dt,
                     comment = answers["comment"],
                     ts_modified = datetime.today()
                 )           
@@ -169,7 +225,32 @@ class Registry:
         
         return result
 
-    def get_transactions(self, search_phrase = "", txn_status = 1):
+    def close_transaction(self, id):
+        """Close the old transaction between the library and the client"""
+
+        result = ()
+        
+        try:       
+            for item in self.items:
+                if item._id == id:
+                    item.txn_status = 2
+                    return_dt = datetime.today()
+                    return_dt = return_dt.replace(hour=0, minute=0, second=0, microsecond=0)
+                    item.return_dt = return_dt
+                    result = self._dump_data_to_storage()
+                    return result
+                
+                else:
+                    result = (0, f"Transaction not found.\n")   
+                              
+        except KeyboardInterrupt as err:
+            result = (0, f"Entry cancelled by user. Transaction was not saved.\n")        
+        except Exception as err:
+            result = (0, f"{err}\n")
+        
+        return result
+
+    def get_transactions(self, client_id, txn_status = 1):
         """Returns a list of transactions from the registry based on request criteria"""
 
         found_items = []    
@@ -181,14 +262,18 @@ class Registry:
         
         if self.items:                
             for item in self.items:
-                if item.txn_status in status_list:
-                    if search_phrase:
-                        if search_phrase.lower() in item.__str__().lower():
-                            found_items.append(item)    
-                    else:
-                        found_items.append(item)     
+                if item.txn_status in status_list and item.client_id == client_id:
+                    found_items.append(item)    
         
         return found_items
     
+    def get_transaction_by_id(self, id):
+        """Returns the transaction by its id"""
+        
+        if self.items:                
+            for item in self.items:
+                if item._id == id:
+                    found_txn = item
 
+        return found_txn
 

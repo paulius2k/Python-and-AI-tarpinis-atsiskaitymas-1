@@ -147,15 +147,15 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
     
     error = 0
     msg = ""
-    tx_list = []
-    selected_tx_id = None
+    txn_list = []
+    selected_txn_id = None
     
     try:
 
         if len(registry_items) == 0:
-            display_text = f"\n  No transactions found.\n"
+            display_text = f"\n  No items found.\n"
             print(display_text)
-            wait_for_keypress = input("Press ENTER to continue...")
+            wait_for_keypress = input("Press ENTER to continue...") 
             
         else:
             big_separator = f"{"=" * 150}"
@@ -176,6 +176,7 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
                 f"{"Action":<{col_width_narrow}}"
                 f"{"Pcs.":<{col_width_narrow}}"
                 f"{"Status":<{col_width_narrow}}"
+                f"{"Returned":<{col_width_mid}}"
                 f"{"Comment":<{col_width_wide}}"
             )
             
@@ -185,14 +186,14 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
             
             for idx, item in enumerate(registry_items, start=1):
                 
-        # self.client_id:str = client_id
-        # self.item_id:str = item_id
-        # self.amount:int = amount                    # amount of items
-        # self.txn_type:int = txn_type                # 1-lend, 2-return
-        # self.txn_status:int = txn_status            # 1-open, 2-closed
-        # self.start_dt:datetime = start_dt           # e.g. lending period start date
-        # self.finish_dt:datetime = finish_dt         # e.g. lending period deadline date
-        # self.comment: str = comment                 # free text comment
+                # self.client_id:str = client_id
+                # self.item_id:str = item_id
+                # self.amount:int = amount                    # amount of items
+                # self.txn_type:int = txn_type                # 1-lend, 2-return
+                # self.txn_status:int = txn_status            # 1-open, 2-closed
+                # self.start_dt:datetime = start_dt           # e.g. lending period start date
+                # self.finish_dt:datetime = finish_dt         # e.g. lending period deadline date
+                # self.comment: str = comment                 # free text comment
                 
                 catalogue_item = catalogue_data.get_item_by_id(item.item_id)
                 
@@ -207,14 +208,26 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
                 else:
                     author_checked = catalogue_item.author
 
-                if len(item.comment) >= col_width:
-                    comment_checked = f"{item.comment[:col_width-5].strip()}..."
+                if len(item.comment) >= col_width_wide:
+                    comment_checked = f"{item.comment[:col_width_wide-5].strip()}..."
                 else:
                     comment_checked = item.comment
                 
                 # date formatting
-                start_dt_string = datetime.strftime(item.start_dt, "%Y-%m-%d")
-                finish_dt_string = datetime.strftime(item.finish_dt, "%Y-%m-%d")
+                if item.start_dt:
+                    start_dt_string = datetime.strftime(item.start_dt, "%Y-%m-%d")
+                else:
+                    start_dt_string = ""
+                
+                if item.finish_dt:
+                    finish_dt_string = datetime.strftime(item.finish_dt, "%Y-%m-%d")
+                else:
+                    finish_dt_string = ""
+                    
+                if item.return_dt:
+                    return_dt_string = datetime.strftime(item.return_dt, "%Y-%m-%d")
+                else:
+                    return_dt_string = ""
                 
                 # status parsing to words
                 txn_type_dict = {1: "LEND", 2: "RETURN"}
@@ -240,16 +253,17 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
                     f"{finish_dt_string:<{col_width_mid}}"
                     f"{txn_type_dict[item.txn_type]:<{col_width_narrow}}"
                     f"{item.amount:<{col_width_narrow}}"
-                    f"{txn_status_dict[item.txn_type]:<{col_width_narrow}}"
+                    f"{txn_status_dict[item.txn_status]:<{col_width_narrow}}"
+                    f"{return_dt_string:<{col_width_mid}}"
                     f"{comment_checked:<{col_width_wide}}"
                                         
                     )      
                    
-                tx_list.append(Choice(value=item._id, name=item_line))   
+                txn_list.append(Choice(value=item._id, name=item_line))   
         
-            selected_tx_id = inquirer.select(
+            selected_txn_id = inquirer.select(
                 message=inquirer_msg_text,
-                choices=tx_list,
+                choices=txn_list,
                 default=1,
                 keybindings={"interrupt": [{"key": "escape"}]},
                 raise_keyboard_interrupt=False,
@@ -259,5 +273,5 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
         error = 1
         msg = f"Error printing transactions. {err}\n"
         
-    return {"error": error, "msg": msg, "selected_tx_id": selected_tx_id}
+    return {"error": error, "msg": msg, "selected_txn_id": selected_txn_id}
 
