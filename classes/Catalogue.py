@@ -197,3 +197,5 @@ class Catalogue:
             result = (0, f"Error updating item: {err}\n")
         
         return result 
+    
+    
