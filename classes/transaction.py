@@ -11,7 +11,7 @@ class Transaction:
         self.item_id:str = item_id
         self.amount:int = amount                    # amount of items
         self.txn_type:int = txn_type                # 1-lend, 2-return
-        self.txn_status:int = txn_status            # 1-open, 2-closed
+        self.txn_status:int = txn_status            # 1-open, 2-closed, 3-overdue
         self.start_dt:datetime = start_dt           # e.g. lending period start date
         self.finish_dt:datetime = finish_dt         # e.g. lending period deadline date
         self.return_dt:datetime = return_dt         # e.g. lending period deadline date
@@ -24,16 +24,16 @@ class Transaction:
 
     def __str__(self):
         return (
-            f"[{self._id}, "
-            f"{self.client_id}, "
-            f"{self.item_id}, "
-            f"{self.amount}, "
-            f"{self.txn_type}, "
-            f"{self.txn_status}, "
-            f"{self.start_dt}, "
-            f"{self.finish_dt}, "
-            f"{self.return_dt}, "
-            f"{self._added_user_id}]"
+            f"[txn_id: {self._id}, "
+            f"client_id: {self.client_id}, "
+            f"item_id: {self.item_id}, "
+            f"amount: {self.amount}, "
+            f"txn_type: {self.txn_type}, "
+            f"txn_status: {self.txn_status}, "
+            f"start_dt: {self.start_dt}, "
+            f"finish_dt: {self.finish_dt}, "
+            f"return_dt: {self.return_dt}, "
+            f"added_user_id: {self._added_user_id}]"
         )
     
     def __repr__(self):

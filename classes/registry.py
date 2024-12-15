@@ -112,6 +112,7 @@ class Registry:
                 ask_finish_dt = False                
                 
                 return_dt_dt = datetime.today()
+                return_dt_dt = return_dt_dt.replace(hour=0, minute=0, second=0, microsecond=0)
                 prefilled_answers.update({"return_dt": return_dt_dt})
                                 
             from_date_validator_with_params = Validator.from_callable(
@@ -234,9 +235,10 @@ class Registry:
             for item in self.items:
                 if item._id == id:
                     item.txn_status = 2
-                    return_dt = datetime.today()
-                    return_dt = return_dt.replace(hour=0, minute=0, second=0, microsecond=0)
+                    today_dt = datetime.today()
+                    return_dt = today_dt.replace(hour=0, minute=0, second=0, microsecond=0)
                     item.return_dt = return_dt
+                    item._ts_modified = return_dt
                     result = self._dump_data_to_storage()
                     return result
                 
@@ -250,21 +252,45 @@ class Registry:
         
         return result
 
-    def get_transactions(self, client_id, txn_status = 1):
+    def overdue_transaction(self, id):
+        """Make the transaction "overdue" """
+
+        result = ()
+        
+        try:       
+            for item in self.items:
+                if item._id == id:
+                    item.txn_status = 3
+                    today_dt = datetime.today()
+                    today_dt = today_dt.replace(hour=0, minute=0, second=0, microsecond=0)
+                    item._ts_modified = today_dt
+                    result = self._dump_data_to_storage()
+                    return result
+                
+                else:
+                    result = (0, f"Transaction not found.\n")   
+                              
+        except KeyboardInterrupt as err:
+            result = (0, f"Entry cancelled by user. Transaction was not saved.\n")        
+        except Exception as err:
+            result = (0, f"{err}\n")
+        
+        return result
+
+    def get_transactions(self, client_id, txn_status_set:set = {1,3}):
         """Returns a list of transactions from the registry based on request criteria"""
 
         found_items = []    
-        
-        if txn_status == 0:
-            status_list = {1,2}
-        else:
-            status_list = {txn_status}
-        
+                
         if self.items:                
             for item in self.items:
-                if item.txn_status in status_list and item.client_id == client_id:
-                    found_items.append(item)    
-        
+                if item.txn_status in txn_status_set:
+                    if client_id:
+                        if item.client_id == client_id:
+                            found_items.append(item)    
+                    else:
+                        found_items.append(item)    
+                        
         return found_items
     
     def get_transaction_by_id(self, id):

@@ -5,8 +5,8 @@ Instructions
 
     OK   1. Turėtų būti galima pridėti naują į knygą į biblioteką (knyga, privalo turėti bent, autorių pavadinimą išleidimo metus ir žanrą).
     OK   2.a) Turėtų būti galima pašalinti senas/nebenaudojamas knygas, 
-2.b) -galima daryti pagal išleidimo metus, jeigu senesnis nei x išmetam.
-3. Skaitytojai turėtų galėti pasiimti knygą išsinešimui (knygų kiekis ribotas)
+    OK   2.b) -galima daryti pagal išleidimo metus, jeigu senesnis nei x išmetam.
+    OK   3. Skaitytojai turėtų galėti pasiimti knygą išsinešimui (knygų kiekis ribotas)
     OK   4. Turėtų būti galimybė ieškoti knygų bibliotekoje, pagal knygos pavadinimą arba autorių.
 5. Knygos išduodamos tik tam tikram laikui, jeigu knygos negrąžinamos iki išduotos datos, jos skaitomos vėluojančiomis (angl. Overdue).
     OK   6. Turi būti galima peržiūrėti visas bibliotekos knygas
@@ -29,9 +29,9 @@ OK 1. Nerašome visko viename faile (turi būti laikomasi, bent minimalios struk
 OK 3. Programa turi veikti tol, kol bus išjungta, naudotojo pageidavimu
 OK 4. Pridėtos/pašalintos knygos, turi išlikti tarp programos paleidimų (vadinasi viskas saugoma faile)
 OK 5. Informacija saugome pickle/csv/json/txt failuose
-6. Programa negali "nulūžti" (už kiekvieną vietą, kurioje lūžta, minus balai)
-7. Programoje viskas turi būti funkcijose/metoduose klasėse. Globaliai jie gali būti tik kviečiami, bet visi skaičiavimai būtent šiose struktūrose.
-8. Privaloma naudota GitHub ir turėti logiškus commit pavadinimus, bent 3 šakas sukurtas projekto metu ir bent 5 commitų (commitai neturėtų būti labai dideli)
+OK 6. Programa negali "nulūžti" (už kiekvieną vietą, kurioje lūžta, minus balai)
+OK 7. Programoje viskas turi būti funkcijose/metoduose klasėse. Globaliai jie gali būti tik kviečiami, bet visi skaičiavimai būtent šiose struktūrose.
+OK 8. Privaloma naudota GitHub ir turėti logiškus commit pavadinimus, bent 3 šakas sukurtas projekto metu ir bent 5 commitų (commitai neturėtų būti labai dideli)
  
 
 Taip pat prisekite word failą, kuriame bus tokie dalykai.
@@ -57,5 +57,9 @@ nes gali būti, kad funkcija priims ne tą parametrą, kurį galvoji kad perduod
 4. Ar turite kokių pastebėjimų
 - vienas didesnių uždavinių yra išmokti rasti balansą tarp universalių ir atskirų funkcijų, kurios atlieka labai panašias užduotis.
 Tokie atviri klausimai: 
+-- ar geriau viena funkcija su daugiau if'ų, ar daugiau funkcijų su panašiu kodu
 -- skaitomumas vs. kodo vietų kiekis atliekant pakeitimus,
--- gal geriau viena funkcija su keletu daugiau if'ų
+
+- kaip geriau padaryti klaidų valdymą ir parodymą tik reikalingiausios informacijos vartotojui.  Dabar pas mane padaryta, 
+kad visos funkcijos grąžina (ir jeigu yra kviečiama funkcijų grandinė, tuomet - perduoda viena kitai) 
+rezultatą, kuris susideda iš: veiksmo statuso, klaidos pranešimo ir jei reikia - kokios nors kitos informacijos.

@@ -28,3 +28,5 @@ def prepare_to_list_items(catalogue: Catalogue, search_by = "", item_status = 1,
         msg = f"Error listing items: {err}"
     
     return (error, msg, selected_item)
+
+    

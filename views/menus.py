@@ -64,6 +64,7 @@ def main_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry):
                                 item_menu_logic(catalogue, clients, registry, item_id)
                                 
                         case "add":
+                            print()
                             result = catalogue.add_book()
                             if result[0] == 1:
                                 print("\nNew book added")
@@ -105,7 +106,20 @@ def main_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry):
                                 wait_for_keypress = input("Press ENTER to continue...")
                                 
                         case "list_overdue":
-                            wait_for_keypress = input("\nThis function is not available yet. Press ENTER to continue...")
+                            top_msg = f"LISTING ALL OVERDUE ITEMS"
+                            list_result = tx_actions.prepare_to_list_transactions(registry=registry, catalogue=catalogue, client_id="",txn_status_set={3}, top_msg=top_msg)
+                            txn_id = list_result[2]
+                            
+                            if list_result[0] == 1:
+                                print("Listing of transactions failed.")
+                                print(list_result[1])
+                                wait_for_keypress = input("Press ENTER to continue...") 
+                            
+                            if txn_id:
+                                print(f"\nSelected transaction id: {txn_id}\n")
+                                txn_menu_logic(catalogue=catalogue, clients=clients, registry=registry, txn_id=txn_id)
+                            
+                            # wait_for_keypress = input("\nThis function is not available yet. Press ENTER to continue...")
                                                    
                 case "clients":        
                     action = clients_menu_selection()
@@ -253,18 +267,15 @@ def reader_menu_logic(registry: Registry, clients: Clients, catalogue: Catalogue
     match item_action:
         case "active_tx":
             reader = clients.get_client_by_id(client_id)
-            top_msg = f"LISTING UNRETURNED ITEMS OF *{reader.name} {reader.last_name}*"
-            list_result = tx_actions.prepare_to_list_transactions(registry=registry, catalogue=catalogue, client_id=client_id, txn_status=1, top_msg=top_msg)
+            top_msg = f"LISTING UNRETURNED ITEMS OF *{reader.name} {reader.last_name} (b. {reader.dob.strftime("%Y-%m-%d")})*"
+            list_result = tx_actions.prepare_to_list_transactions(registry=registry, catalogue=catalogue, client_id=client_id,txn_status_set={1,3}, top_msg=top_msg)
             txn_id = list_result[2]
             
             if list_result[0] == 1:
                 print("Listing of transactions failed.")
                 print(list_result[1])
                 wait_for_keypress = input("Press ENTER to continue...") 
-
-            # if not list_result[1]:
-            #     wait_for_keypress = input("Press ENTER to continue...") 
-                
+               
             if txn_id:
                 print(f"\nSelected transaction id: {txn_id}\n")
                 txn_menu_logic(catalogue=catalogue, clients=clients, registry=registry, txn_id=txn_id)
@@ -272,8 +283,8 @@ def reader_menu_logic(registry: Registry, clients: Clients, catalogue: Catalogue
     
         case "closed_tx":
             reader = clients.get_client_by_id(client_id)
-            top_msg = f"LISTING OLD TRANSACTIONS OF *{reader.name} {reader.last_name}*"
-            list_result = tx_actions.prepare_to_list_transactions(registry=registry, catalogue=catalogue, client_id=client_id, txn_status=2, top_msg=top_msg)
+            top_msg = f"LISTING OLD TRANSACTIONS OF *{reader.name} {reader.last_name} (b. {reader.dob.strftime("%Y-%m-%d")})*"
+            list_result = tx_actions.prepare_to_list_transactions(registry=registry, catalogue=catalogue, client_id=client_id, txn_status_set={2}, top_msg=top_msg)
             txn_id = list_result[2]
             
             if list_result[0] == 1:
@@ -283,7 +294,7 @@ def reader_menu_logic(registry: Registry, clients: Clients, catalogue: Catalogue
             if txn_id:
                 print(f"\nThere are no available actions with this transaction\n")
                 
-            wait_for_keypress = input("Press ENTER to continue...") 
+            # wait_for_keypress = input("Press ENTER to continue...") 
         
         case "deactivate":
             pass

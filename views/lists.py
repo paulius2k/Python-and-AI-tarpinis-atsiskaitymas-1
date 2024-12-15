@@ -4,6 +4,7 @@ from classes.registry import Registry
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from datetime import datetime
+import os
 
 def list_catalogue_dynamic(data: Catalogue, scope_msg = ""):
     """
@@ -144,7 +145,7 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
     """
     Generates a dynamic list of client transactions on the screen for viewing and actions.
     """
-    
+                
     error = 0
     msg = ""
     txn_list = []
@@ -153,11 +154,13 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
     try:
 
         if len(registry_items) == 0:
-            display_text = f"\n  No items found.\n"
+            display_text = f"\n  No transactions found.\n"
             print(display_text)
             wait_for_keypress = input("Press ENTER to continue...") 
             
         else:
+            os.system('cls')  
+            print()
             big_separator = f"{"=" * 150}"
             small_separator = f"{"-" * 150}"
             col_width = 20
@@ -231,7 +234,7 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
                 
                 # status parsing to words
                 txn_type_dict = {1: "LEND", 2: "RETURN"}
-                txn_status_dict = {1: "Open", 2: "Closed"}
+                txn_status_dict = {1: "Open", 2: "Closed", 3: "Overdue"}
 
                 # f"{"Eil.nr":<{col_width_narrow}}"
                 # f"{"Title":<{col_width}}"
