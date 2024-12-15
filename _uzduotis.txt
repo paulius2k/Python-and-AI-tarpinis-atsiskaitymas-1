@@ -5,13 +5,13 @@ Instructions
 
     OK   1. Turėtų būti galima pridėti naują į knygą į biblioteką (knyga, privalo turėti bent, autorių pavadinimą išleidimo metus ir žanrą).
     OK   2.a) Turėtų būti galima pašalinti senas/nebenaudojamas knygas, 
-2.b) -galima daryti pagal išleidimo metus, jeigu senesnis nei x išmetam.
-3. Skaitytojai turėtų galėti pasiimti knygą išsinešimui (knygų kiekis ribotas)
+    OK   2.b) -galima daryti pagal išleidimo metus, jeigu senesnis nei x išmetam.
+    OK   3. Skaitytojai turėtų galėti pasiimti knygą išsinešimui (knygų kiekis ribotas)
     OK   4. Turėtų būti galimybė ieškoti knygų bibliotekoje, pagal knygos pavadinimą arba autorių.
-5. Knygos išduodamos tik tam tikram laikui, jeigu knygos negrąžinamos iki išduotos datos, jos skaitomos vėluojančiomis (angl. Overdue).
+    OK   5. Knygos išduodamos tik tam tikram laikui, jeigu knygos negrąžinamos iki išduotos datos, jos skaitomos vėluojančiomis (angl. Overdue).
     OK   6. Turi būti galima peržiūrėti visas bibliotekos knygas
-7. Turi būti galima peržiūrėti visas vėluojančias knygas
-8. Turi būti neleidžiama pasiimti knygos, jeigu skaitytojas turi vėluojančią knygą ir jis turi būti įspėtas, kad knyga vėluoja
+    OK   7. Turi būti galima peržiūrėti visas vėluojančias knygas
+    OK   8. Turi būti neleidžiama pasiimti knygos, jeigu skaitytojas turi vėluojančią knygą ir jis turi būti įspėtas, kad knyga vėluoja
  
 
 Bonus Balai (neprivaloma padaryti)
@@ -29,22 +29,37 @@ OK 1. Nerašome visko viename faile (turi būti laikomasi, bent minimalios struk
 OK 3. Programa turi veikti tol, kol bus išjungta, naudotojo pageidavimu
 OK 4. Pridėtos/pašalintos knygos, turi išlikti tarp programos paleidimų (vadinasi viskas saugoma faile)
 OK 5. Informacija saugome pickle/csv/json/txt failuose
-6. Programa negali "nulūžti" (už kiekvieną vietą, kurioje lūžta, minus balai)
-7. Programoje viskas turi būti funkcijose/metoduose klasėse. Globaliai jie gali būti tik kviečiami, bet visi skaičiavimai būtent šiose struktūrose.
-8. Privaloma naudota GitHub ir turėti logiškus commit pavadinimus, bent 3 šakas sukurtas projekto metu ir bent 5 commitų (commitai neturėtų būti labai dideli)
+OK 6. Programa negali "nulūžti" (už kiekvieną vietą, kurioje lūžta, minus balai)
+OK 7. Programoje viskas turi būti funkcijose/metoduose klasėse. Globaliai jie gali būti tik kviečiami, bet visi skaičiavimai būtent šiose struktūrose.
+OK 8. Privaloma naudota GitHub ir turėti logiškus commit pavadinimus, bent 3 šakas sukurtas projekto metu ir bent 5 commitų (commitai neturėtų būti labai dideli)
  
 
 Taip pat prisekite word failą, kuriame bus tokie dalykai.
 
 1. Įsivertinti save, kažkokiu tai pažymiu iki 10
 2. Parašyti, kas patiko ar nepatiko darbo metu
+- užmirštu "push" užbaigtą funkcionalumą atskiroje šakoje, pradedu kurti kitą funkcionalumą, o paskui kai prisimenu, 
+gaunasi kad sukuriu pull request tiek senam, tiek jau pradėtam naujam  funkcionalumui
+- šakoje pakeičiu failų pavadinimus (pvz pirmą raidę vietoj CAP, darau lowercase), sumerge'inu į main, vėliau kuriant naują šaką, 
+man kartais ateina senas failo pavadinimas su Cap pirma raide
+
 3. Kas buvo naujo, ko išmokote
 - pradėjau labiau mėgti metodus klasėse ir mažiau kurti išorinių funkcijų
-- pabandymai naudoti paprastą git merge'inimą (pvz. per Git Graph) vs. git pull request
-- dar kartą įsitikinau, kad klasės parametro tipo nurodymas klasės deklaracijoje NEREIŠKIA, kad toks tipas bus išsaugotas automatiškai: tą reikia užtikrinti programiškai
+- bandymai naudoti paprastą "git merge" (per Git Graph) lyginant su "git pull request": pirmas variantas greičiau, bet nėra užregistruojamas pull request,
+negalima peržiūrėti GitHub'e ir pateikti pastabų
+- dar kartą įsitikinau, kad klasės parametro tipo nurodymas klasės deklaracijoje NEREIŠKIA, 
+kad toks tipas bus ir išsaugotas: įrašant/išsaugojant parametrą reikia užtikrinti programiškai koks bus jo tipas, reikalui esant - konvertuoti. 
+Pvz. galvoji kad bus išsaugotas 1 (int), bet realiai iš vartotojo priimtas inputas yra išsaugomas kaip "1" (str).
+- kai funkcija priima keletą neprivalomų argumentų, geriau tą funkciją kviesti nurodant paduodamo parametro pavadinimą (pvz. statusas=1, o ne tiesiog "1"),
+nes gali būti, kad funkcija priims ne tą parametrą, kurį galvoji kad perduodi.
+
 
 4. Ar turite kokių pastebėjimų
 - vienas didesnių uždavinių yra išmokti rasti balansą tarp universalių ir atskirų funkcijų, kurios atlieka labai panašias užduotis.
 Tokie atviri klausimai: 
+-- ar geriau viena funkcija su daugiau if'ų, ar daugiau funkcijų su panašiu kodu
 -- skaitomumas vs. kodo vietų kiekis atliekant pakeitimus,
--- gal geriau viena funkcija su keletu daugiau if'ų
+
+- kaip geriau padaryti klaidų valdymą ir parodymą tik reikalingiausios informacijos vartotojui.  Dabar pas mane padaryta, 
+kad visos funkcijos grąžina (ir jeigu yra kviečiama funkcijų grandinė, tuomet - perduoda viena kitai) 
+rezultatą, kuris susideda iš: veiksmo statuso, klaidos pranešimo ir jei reikia - kokios nors kitos informacijos.

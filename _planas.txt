@@ -103,27 +103,35 @@ views
         def show_main_menu():
             """
 
-            LIBRARIAN MENU STRUCTURE:
+            LIBRARY MENU STRUCTURE:
             ----------------------
-            LEND ITEM
-                - SEARCH ITEM
-                    -- {ITEM} ACTIONS MENU
 
-            RETURN ITEM
-                - SEARCH READER
+            • LIBRARY CATALOGUE (incl. LEND ITEM)
+                - 1. SEARCH FOR ITEM
+                    -- {SELECTED ITEM} ACTIONS MENU
+                        --- LEND ITEM (workflow: --> search for reader --> new LEND transaction)
+                        --- DELETE ITEM (yes/no)
+                - 2. LIST ALL ITEMS
+                    -- {SELECTED ITEM} ACTIONS MENU
+                        --- LEND ITEM (workflow: --> search for reader --> new LEND transaction)
+                        --- DELETE ITEM (yes/no)
+                - 3. LIST OVERDUE ITEMS
+                    -- {SELECTED TRANSACTION} ACTIONS MENU
+                        --- RETURN ITEM
+                --------------------------------------------
+                - 4. ADD NEW BOOK
+                - 5. LIST DELETED ITEMS
+            ------------------------------------------------
+            • CLIENTS (incl. RETURN ITEM)
+                - 1. SEARCH FOR A READER
                     -- {READER} ACTIONS MENU
+                        --- LIST BORROWED BOOKS
+                            ---- {SELECTED TRANSACTION} ACTIONS MENU
+                                ----- RETURN ITEM
+                        --- LIST CLOSED TRANSACTIONS
+                        --- DEACTIVATE READER (yes/no)
+                - 2. REGISTER NEW READER
 
-            LIBRARY CATALOGUE
-                - LIST ALL ITEMS
-                    -- {ITEM} ACTIONS MENU
-                - SEARCH FOR ITEM
-                    -- {ITEM} ACTIONS MENU
-                - ADD NEW BOOK
-                - DELETE BOOK
-                    - SEARCH ITEM
-                        -- {ITEM} ACTIONS MENU
-                - LIST DELETED ITEMS
-                - CATALOGUE STATISTICS
 
 
         def {other_menus}:
