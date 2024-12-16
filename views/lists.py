@@ -57,7 +57,7 @@ def list_catalogue_dynamic(data: Catalogue, scope_msg = ""):
                 default=1,
                 keybindings={"interrupt": [{"key": "escape"}]},
                 raise_keyboard_interrupt=False,
-                pointer=">>",
+                pointer=">",
             ).execute()
                 
     except Exception as err:
@@ -137,7 +137,7 @@ def list_clients_dynamic(data: Clients, scope_msg = ""):
                 choices=clients_list,
                 default=1,
                 keybindings={"interrupt": [{"key": "escape"}]},
-                pointer=">>",
+                pointer=">",
             ).execute()
                 
     except Exception as err:
@@ -275,7 +275,7 @@ def list_transactions_dynamic(registry_items:list, catalogue_data: Catalogue, sc
                 default=1,
                 keybindings={"interrupt": [{"key": "escape"}]},
                 raise_keyboard_interrupt=False,
-                pointer=">>",
+                pointer=">",
             ).execute()
                 
     except Exception as err:

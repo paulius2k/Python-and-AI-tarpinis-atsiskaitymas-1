@@ -27,16 +27,10 @@ def main_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry):
         stop_menu = False
         
         while not stop_menu:
-            
-            # Option 2: re-load lists on every main menu draw
-            # this is done 
-            # catalogue = Catalogue()
-            # clients = Clients()
-            # registry = Registry()
-            
+                       
             os.system('cls')  
             print()
-            print("="*80)
+            # print("="*80)
             
             area = main_menu_selection()
             
@@ -316,19 +310,11 @@ def main_menu_selection():
     """
     Menu item display and user selection capture and return to main menu logic.
     """
-    my_style = {
-        "marker": "> ",  # Use ASCII for the selected marker
-        "selected_pointer": ">> ",  # Selected pointer in ASCII
-        "questionmark": "?",
-        }
-  
-
+    print(f"Keys: ↑, ↓ - to move, ENTER - to choose action with item, ESC - to exit\n")
+    
     selected_action = inquirer.select(
         message="\nMAIN LIBRARY MENU. SELECT AN AREA TO WORK WITH:",
         choices=[
-            # Choice(value="lend", name="• LEND ITEM •"),
-            # Choice(value="return", name="• RETURN ITEM •"),
-            # Separator(),
             Choice(value="catalogue", name="• LIBRARY CATALOGUE (incl. LEND ITEM) •"),
             Choice(value="clients", name="• CLIENTS (incl. RETURN ITEM) •"),
             Separator(),
@@ -337,7 +323,7 @@ def main_menu_selection():
         default=1,
         keybindings={"interrupt": [{"key": "escape"}]},
         raise_keyboard_interrupt=False,
-        pointer=">>",
+        pointer=">",
     ).execute()
 
         
@@ -370,7 +356,7 @@ def catalogue_menu_selection():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-            pointer=">>",
+            pointer=">",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -393,7 +379,7 @@ def clients_menu_selection():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-            pointer=">>",
+            pointer=">",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -416,7 +402,7 @@ def selected_item_menu():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-            pointer=">>",
+            pointer=">",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -441,7 +427,7 @@ def selected_client_menu():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-            pointer=">>",
+            pointer=">",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -463,7 +449,7 @@ def selected_transaction_menu():
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-            pointer=">>",
+            pointer=">",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.
@@ -484,7 +470,7 @@ def user_confirmation(prompt_text = "Yes or no"):
             default=1,
             keybindings={"interrupt": [{"key": "escape"}]},
             raise_keyboard_interrupt=False,
-            pointer=">>",
+            pointer=">",
         ).execute()
     except KeyboardInterrupt:
         selected_action = None  # Cancel operation if user interrupts the process.

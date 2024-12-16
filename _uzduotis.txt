@@ -25,7 +25,7 @@ Bonus Balai (neprivaloma padaryti)
 Būtinos sąlygos
 
 OK 1. Nerašome visko viename faile (turi būti laikomasi, bent minimalios struktūros)
-2. Pabaigus programą pateikiame exe formatu.
+OK 2. Pabaigus programą pateikiame exe formatu.
 OK 3. Programa turi veikti tol, kol bus išjungta, naudotojo pageidavimu
 OK 4. Pridėtos/pašalintos knygos, turi išlikti tarp programos paleidimų (vadinasi viskas saugoma faile)
 OK 5. Informacija saugome pickle/csv/json/txt failuose

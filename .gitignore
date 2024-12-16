@@ -169,3 +169,5 @@ cython_debug/
 
 # Specific files
 _test*.py
+_planas.txt
+_uzduotis.txt
