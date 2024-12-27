@@ -11,5 +11,5 @@ class Person:
         self.dob:int = dob
         
         self.added_user_id:str = added_user_id
-        self.ts_added:datetime = datetime.today()
+
         

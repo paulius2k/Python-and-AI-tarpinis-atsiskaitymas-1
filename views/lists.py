@@ -95,7 +95,7 @@ def list_clients_dynamic(data: Clients, scope_msg = ""):
                     f"{"Name":<{col_width}}"
                     f"{"Last name":<{col_width}}"
                     f"{"Date of birth":<{col_width}}"
-                    f"{"Card #":<{col_width_narrow}}"
+                    f"{"Card #":<{col_width}}"
                     f"{"Status":>{col_width_narrow}}"
             )
             
@@ -127,7 +127,7 @@ def list_clients_dynamic(data: Clients, scope_msg = ""):
                     f"{name_checked:<{col_width}}"
                     f"{lastname_checked:<{col_width}}"
                     f"{dob_string:<{col_width}}"
-                    f"{item.client_card_no:<{col_width_narrow}}"
+                    f"{item.client_card_no:<{col_width}}"
                     f"{status_string:>{col_width_narrow}}"
                 )
                 clients_list.append(Choice(value=item.id, name=item_line))   

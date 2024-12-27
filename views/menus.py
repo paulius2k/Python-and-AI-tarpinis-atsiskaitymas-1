@@ -130,6 +130,7 @@ def main_menu_logic(catalogue: Catalogue, clients: Clients, registry: Registry):
                             if list_result[0] == 1:
                                 print("Search failed.")
                                 print(list_result[1])
+                                wait_for_keypress = input("Press ENTER to continue...")
                         
                             if list_result[2]:
                                 print(f"\nSelected client id: {list_result[2]}\n")

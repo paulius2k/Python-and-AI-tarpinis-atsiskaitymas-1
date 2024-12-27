@@ -1,28 +1,43 @@
 from InquirerPy import prompt
 from InquirerPy.validator import EmptyInputValidator
 from datetime import datetime
-import pickle
-import os
-import constants as const
-from classes.book import Book
+from classes.item import Item
+from modules.utilities import Database
 
 class Catalogue:
     """
     A catalogue of all items the library owns.
     """
     def __init__(self):
-        # First try to load data from file if such exists
-        try:
-            if os.path.isfile(const.CATALOGUE_FILE_NAME):
-                with open(const.CATALOGUE_FILE_NAME, "rb") as file:
-                    obj = pickle.load(file)
-
-                # copy all attributes from the loaded object to self
-                self.__dict__.update(obj.__dict__)
-            else:
-                self.items = []
-        except Exception:
-            self.items = []        
+        conn = Database.get_connection()
+        cur = conn.cursor()
+        
+        # Fetch all items
+        cur.execute('''
+                    SELECT id, title, author, publication_year, genre, type, total_units, available_units, status, added_user_id
+                    FROM library_db.items
+                ''')
+        
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+        
+        if rows:
+            self.items = [Item(                    
+                    id=row[0],
+                    title=row[1], 
+                    author=row[2], 
+                    publication_year=row[3], 
+                    genre=row[4],
+                    type=row[5],
+                    total_units=row[6],
+                    available_units=row[7],
+                    status=row[8],
+                    added_user_id=row[9]
+                    )
+                for row in rows]
+        else:
+            self.items = []     
         
     def __str__(self):
         result = ""
@@ -30,20 +45,20 @@ class Catalogue:
             result += f"{item}\n"
         return result
        
-    def _dump_data_to_storage(self):
-        result = 0
-        msg = ""
+    # def _dump_data_to_storage(self):
+    #     result = 0
+    #     msg = ""
         
-        try:
-            with open(const.CATALOGUE_FILE_NAME, "wb") as file:
-                pickle.dump(self, file)
-            result = 1
-            msg = f"Data stored successfully"
+    #     try:
+    #         with open(const.CATALOGUE_FILE_NAME, "wb") as file:
+    #             pickle.dump(self, file)
+    #         result = 1
+    #         msg = f"Data stored successfully"
             
-        except Exception as err:
-            msg = f"Error storing data. {err}\n"
+    #     except Exception as err:
+    #         msg = f"Error storing data. {err}\n"
         
-        return (result, msg)
+    #     return (result, msg)
     
     def add_book(self):
         """Add new Book to the catalogue"""
@@ -105,26 +120,36 @@ class Catalogue:
                 )
 
             if answers:
-                new_item = Book(
+                new_item = Item(
                     title = answers["title"],
                     author = answers["author"],
                     publication_year = int(answers["publication_year"]),
+                    type = 1,   # 1 - book, 2 - magazine
                     genre = answers["genre"],
                     total_units = int(answers["total_units"]),
                     available_units = int(answers["total_units"])
-                )
+                )               
                 
-                self.items.append(new_item)
+                new_item.save()
+                
+                self.__init__()
+                
+                result = 1 
+                msg = f"\nItem added successfully"
+                
+                
                 
             # save data to file
-            result = self._dump_data_to_storage()
+            # result = self._dump_data_to_storage()
                 
         except KeyboardInterrupt as err:
-            result = (0, f"Entry cancelled by user. Item was not saved.\n")        
+            result = 0
+            msg = f"Entry cancelled by user. Item was not saved.\n"        
         except Exception as err:
-            result = (0, f"{err}\n")
+            result = 0
+            msg = f"{err}\n"
         
-        return result
+        return (result, msg)
 
     def get_items(self, search_phrase = "", item_status = 1):
         """Returns a list of items from the catalogue depending of request criteria"""
@@ -160,8 +185,25 @@ class Catalogue:
         try:
             for item in self.items:
                 if item.id == id:
-                    item.status = 2
-                    dump_result = self._dump_data_to_storage()
+                    # update item status to 2 (deleted)
+                    # item.status = 2
+                    # dump_result = self._dump_data_to_storage()
+                    
+                    conn = Database.get_connection()
+                    cur = conn.cursor()
+    
+                    cur.execute('''
+                                UPDATE library_db.items
+                                SET
+                                status = 2
+                                WHERE id = %s;
+                            ''', (id,))
+                    conn.commit()
+                    cur.close()
+                    conn.close()
+                    
+                    self.__init__()                   
+                    
                     result = (1, "\nItem deleted successfully")
                     break
         
@@ -186,9 +228,26 @@ class Catalogue:
                     elif new_amount > item.total_units:
                         result = (0, "\nAmount of available units after the transaction would exceed the total units owned by the library. Transaction not possible.")
                         break
-                    else:
-                        item.available_units = new_amount
-                        dump_result = self._dump_data_to_storage()
+                    else:                        
+                        # update record in the database
+                        ## item.available_units = new_amount
+                        ## dump_result = self._dump_data_to_storage()
+
+                        conn = Database.get_connection()
+                        cur = conn.cursor()
+        
+                        cur.execute('''
+                                    UPDATE library_db.items
+                                    SET
+                                    available_units = %s
+                                    WHERE id = %s;
+                                ''', (new_amount, id))
+                        conn.commit()
+                        cur.close()
+                        conn.close()
+                        
+                        self.__init__()
+                             
                         result = (1, "\nItem updated successfully")
                         break
                 else:
@@ -197,5 +256,4 @@ class Catalogue:
             result = (0, f"Error updating item: {err}\n")
         
         return result 
-    
     
