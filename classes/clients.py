@@ -27,7 +27,22 @@ class Clients:
         for item in self.items:
             result += f"{item}\n"
         return result
-       
+ 
+    # def _dump_data_to_storage(self):
+    #     result = 0
+    #     msg = ""
+        
+    #     try:
+    #         with open(const.CLIENTS_FILE_NAME, "wb") as file:
+    #             pickle.dump(self, file)
+    #         result = 1
+    #         msg = f"Data stored successfully"
+            
+    #     except Exception as err:
+    #         msg = f"Error storing data. {err}\n"
+        
+    #     return (result, msg)
+
     def _dump_data_to_storage(self):
         result = 0
         msg = ""

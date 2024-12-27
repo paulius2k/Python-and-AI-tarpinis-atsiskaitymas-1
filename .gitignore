@@ -171,3 +171,4 @@ cython_debug/
 _test*.py
 _planas.txt
 _uzduotis.txt
+my_secrets.py
